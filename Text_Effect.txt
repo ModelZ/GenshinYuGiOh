@@ -1,0 +1,30 @@
+Furina De Fontaine
+1 "Fontaine" monster + 1 "Genshin" WATER monster
+When this card is fusion summoned: you can send the opponent's monster from field to hand, also, Place 1 Lullaby Counter on this card. When your opponent adds a card, place 1 Lullaby Counter on this card. When your opponent's monster(s) would be Summoned: remove 1 Lullaby Counter; negate the Summon, and if you do, return it to the hand.
+
+Lesser Lord Kusanali
+1 "Sumeru" monster + 1 "Genshin" WOOD monster
+Your opponent cannot activate a card or effect response to your "Genshin" card. You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); increase the number of that Counter by the number of removed Akara counter(s). When other card(s) place a counter, Place 1 Akara Counter on this card. When a card would be destroyed by battle or a card effect (Quick Effect): you can remove 1 Akara Counter instead and take no damage. 
+
+Raiden Shogun
+1 "Inazuma" monster + 1 "Genshin" DARK monster
+Your Lighting Counters on this card won't be removed after this card leaves the field.
+If this card is fusion summoned: you can banish all the opponent's cards from the GY, also Place 1 Lighting Counter on this card. When your opponent's monster effect is activated, you can Place 1 Lighting Counter on this card. If this card leaves the field by your opponent's card effect (Quick Effect): you can remove 1 Lighting Counter; destroy that card, also, after that Special Summon this card.
+
+Goddess Lumine
+3 "Genshin" Fusion monsters
+You can Fusion Summon this card without using Fusion Spell and This fusion summon cannot be negated. If this card is Fusion Summoned: Banish all opponent's cards in the Extra Deck and shuffle all cards in your opponent's GY into the deck. Once per turn, during the opponent's draw phase: You can target your "Genshin" card that has a Counter you control; remove 1 Counter from it, and if you do, skip your opponent's draw phase. Once per turn, during the standby phase: You can special summon 1 "Genshin" monster or Fusion monster from Extra Deck, Deck, GY, Banished Zone. If this card is left from your field (Quick Effect); You can special summon this card, also, increase all your monster's Counter on the field by 1. When your opponent's card or effect is activated (Quick Effect): Target 1 monster with a Counter you control; negate the activation, then, increase all monster's Counter you control by 1.
+
+Barbatos
+1 "Mondstadt" monster + 1 "Genshin" WIND monster
+If this card is fusion summoned or Special Summoned: You can target the "Genshin" monster in GY, and add it to hand. Once per turn, you can send this card to GY; Special Summon 2 "Genshin" monsters from your deck. When the opponent's card or effect is activated that negates your card activation or effect while this card is in GY (Quick Effect): discard 1 "Genshin" card; negate the activation or effect, and if you do, Special Summon this card.
+
+Rex Lapis
+1 "Liyue" monster + 1 "Genshin" ROCK monster
+All "Genshin" cards you control are unaffected by your opponent's card effect while this card is on the field or GY and your opponent's monsters cannot attack any monsters, except this one. When a Spell/Trap card or effect is activated, you can Place 1 Pillar Counter on this card. When your opponent's monster effect is activated: you can remove 1 Pillar Counter from this card; negate that effect, and if you do, send it to GY.
+
+Kokomi
+Navia
+Keqing
+Faruzan
+Kirara
