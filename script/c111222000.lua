@@ -30,3 +30,4 @@ end
 
 function s.fusionfilter1(c)
 	return c:ListsArchetype(0x5003)
+end
