@@ -37,7 +37,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 
 	Debug.Message("s.target active")
 	local tg=Duel.SelectMatchingCard(tp,s.tgfilter,tp,0,LOCATION_MZONE,1,1,nil)
-	Debug.Message("tg = "+tg)
+	Debug.Message(tg)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,tg,1,1-tp,LOCATION_MZONE)
 end
 
