@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	--When this card is fusion Summoned: You can return 1 opponent's monster on the field to the hand, also, Place 1 Lullaby Counter on this card.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_COUNTER) -- effect categories for other effect to trigger
+	e1:SetCategory(CATEGORY_TOHAND) -- effect categories for other effect to trigger
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O) -- type of activaing effect
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS) -- event of this effect
 	e1:SetProperty(EFFECT_FLAG_DELAY)
