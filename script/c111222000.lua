@@ -26,12 +26,17 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp)
-	if chk == 0 then return Duel.IsExistingMatchingCard(s.tgfilter,tp,0,LOCATION_MZONE,1,nil) end
+	if chk == 0 then return Duel.IsExistingMatchingCard(s.tgfilter,tp,0,LOCATION_MZONE,1,nil)
+	Debug.Message("chk == 0 active")
+	end
+	Debug.Message("s.target active")
 	local tg=Duel.SelectMatchingCard(tp,s.tgfilter,tp,0,LOCATION_MZONE,1,1,nil)
+	Debug.Message("tg = "+tg)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,tg,1,1-tp,LOCATION_MZONE)
 end
 
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
+	Debug.Message("s.activate active")
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 	local g=Duel.SelectMatchingCard(tp,s.tgfilter,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SendtoHand(g,REASON_EFFECT)
