@@ -16,7 +16,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 s.listed_series={0x5003}
-
+Debug.Message("debug active")
 function s.tgfilter()
 	return c:IsMonster() and c:IsAbleToHand()
 end
