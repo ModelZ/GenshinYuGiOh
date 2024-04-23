@@ -10,6 +10,7 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_COUNTER) -- effect categories for other effect to trigger
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O) -- type of activaing effect
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS+EVENT_TO_HAND) -- event of this effect
+	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCondition(s.condition) -- condition of effect to activate
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate) -- effect resolve
@@ -47,11 +48,9 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.fusionfilter1(c)
-	Debug.Message("s.fusionfilter1 active")
 	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x5003)
 end
 
 function s.fusionfilter2(c)
-	Debug.Message("s.fusionfilter2 active")
 	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x3) and c:IsAttribute(ATTRIBUTE_WATER)
 end
