@@ -18,10 +18,12 @@ end
 s.listed_series={0x5003}
 Debug.Message("debug active")
 function s.tgfilter()
+	Debug.Message("s.tgfilter active")
 	return c:IsMonster() and c:IsAbleToHand()
 end
 
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
+	Debug.Message("s.condition active")
 	return e1:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end
 
@@ -45,9 +47,11 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.fusionfilter1(c)
+	Debug.Message("s.fusionfilter1 active")
 	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x5003)
 end
 
 function s.fusionfilter2(c)
+	Debug.Message("s.fusionfilter2 active")
 	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x3) and c:IsAttribute(ATTRIBUTE_WATER)
 end
