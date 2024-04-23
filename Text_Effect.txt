@@ -1,6 +1,6 @@
 Furina De Fontaine
 1 "Fontaine" monster + 1 "Genshin" WATER monster
-When this card is fusion Summoned: You can send 1 opponent's monster from field to hand, also, Place 1 Lullaby Counter on this card. When your opponent adds a card, place 1 Lullaby Counter on this card. When your opponent's monster(s) would be Summoned: remove 1 Lullaby Counter; negate the Summon, and if you do, return it to the hand.
+If this card is fusion summoned: You can send 1 opponent's monster on the field to hand, also, Place 1 Lullaby Counter on this card. When your opponent adds a card, place 1 Lullaby Counter on this card. When your opponent's monster(s) would be Summoned: remove 1 Lullaby Counter; negate the Summon, and if you do, return it to the hand.
 
 Lesser Lord Kusanali
 1 "Sumeru" monster + 1 "Genshin" WOOD monster
@@ -24,7 +24,11 @@ Rex Lapis
 All "Genshin" cards you control are unaffected by your opponent's card effect while this card is on the field or GY and your opponent's monsters cannot attack any monsters, except this one. When a Spell/Trap card or effect is activated, you can Place 1 Pillar Counter on this card. When your opponent's monster effect is activated: you can remove 1 Pillar Counter from this card; negate that effect, and if you do, send it to GY.
 
 Kokomi
+If this card is Normal or Special Summoned: You can add 1 "Genshin" Spell/Trap card from your deck and add it to hand. When your monster's effect that has Counter on it is activated (Quick Effect): You can Special Summon 1 "Genshin" monster from your Deck. You can only use each effect of "Kokomi" once per turn.
+
 Navia
-Keqing
+This card cannot be destroyed by card effect. If this card is Normal or Special Summoned: You can add 1 "Genshin" monster card from your Deck and add it to your hand. When your monster's effect that has Counter on it is activated (Quick Effect): You can target 1 card on the field and destroy it. You can only use each effect of "Navia" once per turn.
+
+Yaoyao
 Faruzan
-Kirara
+Fischl
