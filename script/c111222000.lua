@@ -45,7 +45,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	Debug.Message("s.activate active")
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 	local g=Duel.SelectMatchingCard(tp,s.tgfilter,tp,0,LOCATION_MZONE,1,1,nil)
-	Duel.SendtoHand(g,REASON_EFFECT)
+	Duel.SendtoHand(g,nil,REASON_EFFECT)
 end
 
 function s.fusionfilter1(c)
