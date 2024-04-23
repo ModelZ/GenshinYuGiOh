@@ -23,11 +23,10 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	Duel.SendtoHand(g,REASON_EFFECT)
 end
 
-
-function s.fusionfilter2(c)
-	return c:ListsArchetype(0x3) and c:IsAttribute(ATTRIBUTE_WATER)
+function s.fusionfilter1(c)
+	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x5003)
 end
 
-function s.fusionfilter1(c)
-	return c:ListsArchetype(0x5003)
+function s.fusionfilter2(c)
+	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x3) and c:IsAttribute(ATTRIBUTE_WATER)
 end
