@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_COUNTER) -- effect categories for other effect to trigger
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O) -- type of activaing effect
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS+EVENT_TO_HAND) -- event of this effect
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS) -- event of this effect
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCondition(s.condition) -- condition of effect to activate
 	e1:SetTarget(s.target)
