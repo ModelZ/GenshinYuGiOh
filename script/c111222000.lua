@@ -1,25 +1,39 @@
 -- Furina De Fontaine
 local s,id=GetID()
 function s.initial_effect(c)
+	c:EnableReviveLimit() --Limit monster revive
 	-- 1 "Fontaine" monster + 1 "Genshin" WATER monster
 	Fusion.AddProcMix(c,true,true,s.fusionfilter1,s.fusionfilter2)
-	--When this card is fusion Summoned: You can send 1 opponent's monster from field to hand, also, Place 1 Lullaby Counter on this card.
+	--When this card is fusion Summoned: You can return 1 opponent's monster on the field to the hand, also, Place 1 Lullaby Counter on this card.
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_COUNTER) -- effect categories for other effect to trigger
-	e1:SetType(EFFECT_TYPE_TRIGGER_O) -- type of activaing effect
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS) -- event of this effect
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O) -- type of activaing effect
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS+EVENT_TO_HAND) -- event of this effect
 	e1:SetCondition(s.condition) -- condition of effect to activate
+	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate) -- effect resolve
 	c:RegisterEffect(e1)
 end
 s.listed_series={0x5003}
 
+function s.tgfilter()
+	return c:IsMonster() and c:IsAbleToHand()
+end
+
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	return e1:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end
 
+function s.target(e,tp,eg,ep,ev,re,r,rp)
+	if chk == 0 then return Duel.IsExistingMatchingCard(s.tgfilter,tp,0,LOCATION_MZONE,1,nil) end
+	local tg=Duel.SelectMatchingCard(tp,s.tgfilter,tp,0,LOCATION_MZONE,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,tg,1,1-tp,LOCATION_MZONE)
+end
+
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.SelectTarget(tp,Card.IsFaceup,tp,LOCATION_ONFIELD,0,1,1,e:GetHandler())
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
+	local g=Duel.SelectMatchingCard(tp,s.tgfilter,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SendtoHand(g,REASON_EFFECT)
 end
 

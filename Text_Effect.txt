@@ -1,6 +1,6 @@
 Furina De Fontaine
 1 "Fontaine" monster + 1 "Genshin" WATER monster
-If this card is fusion summoned: You can send 1 opponent's monster on the field to hand, also, Place 1 Lullaby Counter on this card. When your opponent adds a card, place 1 Lullaby Counter on this card. When your opponent's monster(s) would be Summoned: remove 1 Lullaby Counter; negate the Summon, and if you do, return it to the hand.
+If this card is fusion summoned: You can return 1 opponent's monster on the field to the hand, also, Place 1 Lullaby Counter on this card. When your opponent adds a card, place 1 Lullaby Counter on this card. When your opponent's monster(s) would be Summoned: remove 1 Lullaby Counter; negate the Summon, and if you do, return it to the hand.
 
 Lesser Lord Kusanali
 1 "Sumeru" monster + 1 "Genshin" WOOD monster
