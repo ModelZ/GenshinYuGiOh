@@ -58,5 +58,5 @@ function s.fusionfilter1(c)
 end
 
 function s.fusionfilter2(c)
-	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x3) and c:IsAttribute(ATTRIBUTE_WATER)
+	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x3) and aux.FilterBoolFunctionEx(Card.IsAttribute, ATTRIBUTE_WATER)
 end
