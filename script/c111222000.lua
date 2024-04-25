@@ -1,6 +1,7 @@
 -- Furina De Fontaine
 local s,id=GetID()
 function s.initial_effect(c)
+	c:EnableCounterPermit(0x300) --Can Place Counter 
 	c:EnableReviveLimit() --Limit monster revive
 	-- 1 "Fontaine" monster + 1 "Genshin" WATER monster
 	Fusion.AddProcMix(c,true,true,s.fusionfilter1,s.fusionfilter2)
@@ -46,7 +47,8 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 	local tg=Duel.SelectMatchingCard(tp,s.tgfilter,tp,0,LOCATION_MZONE,1,1,nil)
 	Debug.Message(tg)
-	Duel.SendtoHand(tg,nil,REASON_EFFECT)
+	Duel.SendtoHand(tg,nil,REASON_EFFECT) -- return to hand
+	e:GetHandler():AddCounter(0x300,1) -- add 1 Lullaby Counter
 end
 
 function s.fusionfilter1(c)
