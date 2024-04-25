@@ -54,9 +54,9 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.fusionfilter1(c)
-	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x5003)
+	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x5700)
 end
 
 function s.fusionfilter2(c)
-	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x3) and aux.FilterBoolFunctionEx(Card.IsAttribute, ATTRIBUTE_WATER)
+	return aux.FilterBoolFunctionEx(Card.IsSetCard,0x700) and c:IsAttribute(ATTRIBUTE_WATER)
 end
