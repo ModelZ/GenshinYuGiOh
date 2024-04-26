@@ -18,7 +18,8 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate) -- effect resolve
 	c:RegisterEffect(e1)
-
+	
+	--When your opponent adds a card, place 1 Lullaby Counter on this card.
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,2))
 	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
@@ -32,16 +33,53 @@ function s.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
 	e3:SetCode(EVENT_CHAIN_SOLVED)
 	e3:SetRange(LOCATION_MZONE)
-	e3:SetOperation(s.acop)
+	e3:SetOperation(s.acop) --add 1 Lullaby counter
 	c:RegisterEffect(e3)
+
+	--When your opponent's monster(s) would be Summoned: remove 1 Lullaby Counter; negate the Summon, and if you do, return it to the hand.
+	local e4=Effect.CreateEffect(c)
+	e4:SetCategory(CATEGORY_DISABLE_SUMMON+CATEGORY_TOHAND)
+	e4:SetType(EFFECT_TYPE_TRIGGER_O)
+	e4:SetCode(EVENT_SUMMON)
+	e4:SetCondition(s.condition1)
+	e4:SetCost(s.cost1)
+	e4:SetTarget(s.target1)
+	e4:SetOperation(s.activate1)
+	c:RegisterEffect(e4)
+	local e5=e4:Clone()
+	e5:SetCode(EVENT_FLIP_SUMMON)
+	c:RegisterEffect(e5)
+	local e6=e4:Clone()
+	e6:SetCode(EVENT_SPSUMMON)
+	c:RegisterEffect(e6)
 
 end
 s.listed_series={0x5003}
 Debug.Message("debug active")
 
+function s.activate1(e,tp,eg,ep,ev,re,r,rp)
+	Duel.NegateSummon(eg)
+	Duel.SendtoHand(eg,nil,REASON_EFFECT)
+end
+
+function s.target1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_DISABLE_SUMMON,eg,#eg,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,eg,#eg,0,0)
+end
+
+function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then e:GetHandler():IsCanRemoveCounter(tp,0x300,1,REASON_COST) end
+	e:GetHandler():RemoveCounter(tp,0x300,1,REASON_COST)
+end
+
+function s.condition1(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetCurrentChain(true)==0
+end
+
 function s.acop(e,tp,eg,ep,ev,re,r,rp)
 	Debug.Message("s.acop active")
-	if re:IsHasCategory(CATEGORY_DRAW) or re:IsHasCategory(CATEGORY_SEARCH)then
+	if re:IsHasCategory(CATEGORY_DRAW) or re:IsHasCategory(CATEGORY_SEARCH) then
 		e:GetHandler():AddCounter(0x300,1)
 	end
 
