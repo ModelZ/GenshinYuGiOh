@@ -5,8 +5,6 @@ function s.initial_effect(c)
 	c:EnableReviveLimit() --Limit monster revive
 	-- 1 "Fontaine" monster + 1 "Genshin" WATER monster
 	Fusion.AddProcMix(c,true,true,s.fusionfilter1,s.fusionfilter2)
-	Debug.Message(s.fusionfilter1)
-	Debug.Message(s.fusionfilter2)
 	--When this card is fusion Summoned: You can return 1 opponent's monster on the field to the hand, also, Place 1 Lullaby Counter on this card.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -38,6 +36,7 @@ function s.initial_effect(c)
 
 	--When your opponent's monster(s) would be Summoned: remove 1 Lullaby Counter; negate the Summon, and if you do, return it to the hand.
 	local e4=Effect.CreateEffect(c)
+	e4:SetDescription(aux.Stringid(id,3))
 	e4:SetCategory(CATEGORY_DISABLE_SUMMON+CATEGORY_TOHAND)
 	e4:SetType(EFFECT_TYPE_QUICK_O)
 	e4:SetCode(EVENT_SUMMON)
@@ -58,27 +57,31 @@ s.listed_series={0x5003}
 Debug.Message("debug active")
 
 function s.activate1(e,tp,eg,ep,ev,re,r,rp)
+	Debug.Message("s.activate1 active")
 	Duel.NegateSummon(eg)
 	Duel.SendtoHand(eg,nil,REASON_EFFECT)
 end
 
 function s.target1(e,tp,eg,ep,ev,re,r,rp,chk)
+	Debug.Message("s.target1 active")
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_DISABLE_SUMMON,eg,#eg,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,eg,#eg,0,0)
 end
 
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
+	Debug.Message("s.cost1 active")
 	if chk==0 then e:GetHandler():IsCanRemoveCounter(tp,0x300,1,REASON_COST) end
 	e:GetHandler():RemoveCounter(tp,0x300,1,REASON_COST)
 end
 
 function s.condition1(e,tp,eg,ep,ev,re,r,rp)
+	Debug.Message("s.condition1 active")
 	return Duel.GetCurrentChain(true)==0
 end
 
 function s.acop(e,tp,eg,ep,ev,re,r,rp)
-	Debug.Message("s.acop active")
+	--Debug.Message("s.acop active")
 	if re:IsHasCategory(CATEGORY_DRAW) or re:IsHasCategory(CATEGORY_SEARCH) then
 		e:GetHandler():AddCounter(0x300,1)
 	end
