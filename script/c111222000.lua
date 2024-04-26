@@ -41,7 +41,7 @@ Debug.Message("debug active")
 
 function s.acop(e,tp,eg,ep,ev,re,r,rp)
 	Debug.Message("s.acop active")
-	if re:IsHasCategory(CATEGORY_DRAW) or re:IsHasCategory(CATEGORY_SEARCH)e:GetHandler():GetFlagEffect(1)>0 then
+	if re:IsHasCategory(CATEGORY_DRAW) or re:IsHasCategory(CATEGORY_SEARCH)and e:GetHandler():GetFlagEffect(1)>0 then
 		e:GetHandler():AddCounter(0x300,1)
 	end
 
