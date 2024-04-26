@@ -39,7 +39,7 @@ function s.initial_effect(c)
 	--When your opponent's monster(s) would be Summoned: remove 1 Lullaby Counter; negate the Summon, and if you do, return it to the hand.
 	local e4=Effect.CreateEffect(c)
 	e4:SetCategory(CATEGORY_DISABLE_SUMMON+CATEGORY_TOHAND)
-	e4:SetType(EFFECT_TYPE_TRIGGER_O)
+	e4:SetType(EFFECT_TYPE_QUICK_O)
 	e4:SetCode(EVENT_SUMMON)
 	e4:SetCondition(s.condition1)
 	e4:SetCost(s.cost1)
