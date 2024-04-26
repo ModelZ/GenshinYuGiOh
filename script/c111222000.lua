@@ -73,7 +73,7 @@ end
 
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
 	Debug.Message("s.cost1 active")
-	if chk==0 then Duel.IsCanRemoveCounter(tp,0x300,1,REASON_COST) end
+	if chk==0 then Duel.IsCanRemoveCounter(tp,1,0,0x300,1,REASON_COST) end
 	Duel.RemoveCounter(tp,1,0,0x300,1,REASON_COST)
 end
 
