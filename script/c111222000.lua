@@ -5,7 +5,8 @@ function s.initial_effect(c)
 	c:EnableReviveLimit() --Limit monster revive
 	-- 1 "Fontaine" monster + 1 "Genshin" WATER monster
 	Fusion.AddProcMix(c,true,true,s.fusionfilter1,s.fusionfilter2)
-	Debug.Message(s.fusionfilter1+s.fusionfilter2)
+	Debug.Message(s.fusionfilter1)
+	Debug.Message(s.fusionfilter2)
 	--When this card is fusion Summoned: You can return 1 opponent's monster on the field to the hand, also, Place 1 Lullaby Counter on this card.
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
