@@ -19,7 +19,7 @@ end
 s.listed_series={0x3700}
 
 function s.filter(c)
-	return c:IsSetCard(0x3700) and c:IsAbleToHand()
+	return c:IsSetCard(0x700) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,nil) end
