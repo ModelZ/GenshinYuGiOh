@@ -1,34 +1,66 @@
 Furina De Fontaine
 1 "Fontaine" monster + 1 "Genshin" WATER monster
-If this card is fusion summoned: You can return 1 opponent's monster on the field to the hand, also, Place 1 Lullaby Counter on this card. When your opponent adds a card, place 1 Lullaby Counter on this card. When your opponent's monster(s) would be Summoned: remove 1 Lullaby Counter; negate the Summon, and if you do, return it to the hand.
+If this card is fusion summoned: You can return 1 opponent's monster on the field to the hand, also, Place 1 Lullaby Counter on this card. When your opponent adds a card, place 1 Lullaby Counter on this card. When your opponent's monster(s) would be Summoned (Quick Effect): remove 1 Lullaby Counter; negate the Summon, and if you do, return it to the hand.
 
-Lesser Lord Kusanali
+Lesser Lord Kusanali ATK 2500 DEF 1800
 1 "Sumeru" monster + 1 "Genshin" WOOD monster
 Your opponent cannot activate a card or effect response to your "Genshin" card. You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); increase the number of that Counter by the number of removed Akara counter(s). When other card(s) place a counter, Place 1 Akara Counter on this card. When a card would be destroyed by battle or a card effect (Quick Effect): you can remove 1 Akara Counter instead and take no damage. 
 
-Raiden Shogun
+Raiden Shogun ATK 3500 DEF 2500 DARK
 1 "Inazuma" monster + 1 "Genshin" DARK monster
 Your Lighting Counters on this card won't be removed after this card leaves the field.
 If this card is fusion summoned: you can banish all the opponent's cards from the GY, also Place 1 Lighting Counter on this card. When your opponent's monster effect is activated, you can Place 1 Lighting Counter on this card. If this card leaves the field by your opponent's card effect (Quick Effect): you can remove 1 Lighting Counter; destroy that card, also, after that Special Summon this card.
 
 Goddess Lumine
 3 "Genshin" Fusion monsters
-You can Fusion Summon this card without using Fusion Spell and This fusion summon cannot be negated. If this card is Fusion Summoned: Banish all opponent's cards in the Extra Deck and shuffle all cards in your opponent's GY into the deck. Once per turn, during the opponent's draw phase: You can target your "Genshin" card that has a Counter you control; remove 1 Counter from it, and if you do, skip your opponent's draw phase. Once per turn, during the standby phase: You can special summon 1 "Genshin" monster or Fusion monster from Extra Deck, Deck, GY, Banished Zone. If this card is left from your field (Quick Effect); You can special summon this card, also, increase all your monster's Counter on the field by 1. When your opponent's card or effect is activated (Quick Effect): Target 1 monster with a Counter you control; negate the activation, then, increase all monster's Counter you control by 1.
+Must be Special Summoned (from your Extra Deck) by shuffling the above cards from your field, and/or GY into the Extra Deck.
+This card is unaffected by others card's effect and This card's Special Summon cannot be negated and tributed. 
+If this card is Fusion Summoned: Banish all opponent's cards in the Extra Deck and shuffle all cards in your opponent's GY into the deck. Once per turn, Before the end of your End Phase: You can target your "Genshin" card that has a Counter you control; remove 1 Counter from it, and if you do, skip your opponent's next draw phase. Once per turn, during the standby phase: You can special summon 1 "Genshin" monster or Fusion monster from Extra Deck, Deck, GY, Banished Zone. When your opponent's card or effect is activated (Quick Effect): Target 1 monster with a Counter you control; negate the activation, then, increase all monster's Counter you control by 1.
 
 Barbatos
 1 "Mondstadt" monster + 1 "Genshin" WIND monster
 If this card is fusion summoned or Special Summoned: You can target the "Genshin" monster in GY, and add it to hand. Once per turn, you can send this card to GY; Special Summon 2 "Genshin" monsters from your deck. When the opponent's card or effect is activated that negates your card activation or effect while this card is in GY (Quick Effect): discard 1 "Genshin" card; negate the activation or effect, and if you do, Special Summon this card.
 
-Rex Lapis
+Rex Lapis ATK 2000 DEF 4000 EARTH
 1 "Liyue" monster + 1 "Genshin" ROCK monster
-All "Genshin" cards you control are unaffected by your opponent's card effect while this card is on the field or GY and your opponent's monsters cannot attack any monsters, except this one. When a Spell/Trap card or effect is activated, you can Place 1 Pillar Counter on this card. When your opponent's monster effect is activated: you can remove 1 Pillar Counter from this card; negate that effect, and if you do, send it to GY.
+Your opponent's card effect cannot target all "Genshin" cards you control while this card is on the field or GY and your opponent's monsters cannot attack any monsters, except this one. When a Spell/Trap card or effect is activated, you can Place 1 Pillar Counter on this card. When your opponent's monster effect is activated (Quick Effect): you can remove 1 Pillar Counter from this card; negate that effect, and if you do, send it to GY.
 
-Kokomi
-If this card is Normal or Special Summoned: You can add 1 "Genshin" Spell/Trap card from your deck and add it to hand. When your monster's effect that has Counter on it is activated (Quick Effect): You can Special Summon 1 "Genshin" monster from your Deck. You can only use each effect of "Kokomi" once per turn.
+Kokomi + Navia/Fischl = Ei/Furina
+If this card is Normal or Special Summoned: You can add 1 "Genshin" Spell/Trap card from your deck and add it to hand. If other "Genshin" Monster effect is activated (Quick Effect): You can Special Summon 1 "Genshin" monster from your Deck.  If you control 2 or more "Genshin" Monster on the field, you can activate this effect: Fusion Summon 1 "Genshin" Monster, using monsters from your hand or field as Fusion Material. You can only use each effect of "Kokomi" once per turn.
 
-Navia
-This card cannot be destroyed by card effect. If this card is Normal or Special Summoned: You can add 1 "Genshin" monster card from your Deck and add it to your hand. When your monster's effect that has Counter on it is activated (Quick Effect): You can target 1 card on the field and destroy it. You can only use each effect of "Navia" once per turn.
+Navia + Yaoyao/Kokomi = Furina/Zhongli
+This card cannot be destroyed by card effect. If this card is Normal or Special Summoned: You can add 1 "Genshin" monster card from your Deck and add it to your hand. If other "Genshin" Monster effect is activated (Quick Effect): You can target 1 card on the field and destroy it.  If you control 2 or more "Genshin" Monster on the field, you can activate this effect: Fusion Summon 1 "Genshin" Monster, using monsters from your hand or field as Fusion Material. You can only use each effect of "Navia" once per turn.
 
-Yaoyao
-Faruzan
-Fischl
+Yaoyao + Navia/Faruzan = Zhongli/Nahida
+When opponent's monster effect is activated in response to "Genshin" Card effect or activation (Quick Effect): Discard this card; negate that effect, and if you do return that card to hand. If other "Genshin" Monster effect is activated (Quick Effect): You can Fusion Summon 1 Fusion Monster from your Extra Deck, By return Fusion Materials mentioned on it from your field, and/or GY to your hand. You can only use each effect of "Yaoyao" once per turn.
+
+Faruzan + Fischl/Yaoyao = Babatos/Nahida
+If this card is Normal or Special Summoned: You can Special Summon 1 "Genshin" monster from your Deck. If you control 2 or more "Genshin" Monster on the field, you can activate this effect: Fusion Summon 1 "Genshin" Monster, using monsters from your hand or field as Fusion Material. You can only use each effect of "Faruzan" once per turn.
+
+Fischl + Kokomi/Faruzan = Ei/Babatos
+If you control no monsters, or control "Genshin" Monster (Quick Effect): You can Special Summon this card from your hand or GY. If you control 2 or more "Genshin" Monster on the field, you can activate this effect: Fusion Summon 1 "Genshin" Monster, using monsters from your hand or field as Fusion Material. You can only use each effect of "Fischl" once per turn.
+
+Spell
+======
+First Anniversary
+Normal Spell
+Fusion Summon 1 "Genshin" Monster from your Extra Deck, using monsters from your Deck as Fusion Material. You can only activate 1 "First Anniversary" per turn.
+
+TCG Genshin Card Game
+Normal Spell
+Add 1 "Genshin" card from your Deck to your hand.
+
+Lumine Fusion
+Quick Spell
+Fusion Summon 1 "Genshin" Monster from your Extra Deck, using 1 "Genshin" monster you control and 1 opponent's monster (treat as "Genshin" Monster) as Fusion Material. You can only activate 1 "Lumine Fusion" per turn.
+
+Trap
+=====
+
+My Brother's
+Trap
+When your "Genshin" Fusion monster left the field by opponent's card effect: you can Special Summon all materials of that "Genshin" Fusion monster from your hand, Deck, GY or Banished Zone to your field.
+
+Ad astra abyssosque!
+Counter Trap
+When your opponent activate a card or effect while you control "Genshin" Fusion Monster: Tribute 1 "Genshin" Fusion monster; negate the activation, and if you do, destroy it, and if you do that, your opponent cannot activate Cards with that name for the rest of this Duel. Neither player can activate cards or effects in response to this card's activation.
