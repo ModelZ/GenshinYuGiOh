@@ -37,7 +37,7 @@ function c111222001.initial_effect(c)
     e4:SetCountLimit(1,id+2) -- Once per turn restriction
     e4:SetCondition(s.fusioncondition) -- condition to check for 2+ "Genshin" monsters
     -- Fusion Summon using predefined fusion parameters
-    local fusparams = {fusfilter=Fusion.OnFieldMat(s.fusionfilter1), extrafil=nil, extraop=nil, gc=nil, chkf=tp}
+    local fusparams = {fusfilter=s.fusionfilter1, extrafil=nil, extraop=nil, gc=nil, chkf=tp}
     e4:SetTarget(Fusion.SummonEffTG(fusparams))
     e4:SetOperation(Fusion.SummonEffOP(fusparams))
     c:RegisterEffect(e4)
