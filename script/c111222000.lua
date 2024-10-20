@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND) -- effect categories for other effect to trigger
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O) -- type of activaing effect
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O) -- type of activaing effect
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS) -- event of this effect
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCondition(s.condition) -- condition of effect to activate
@@ -56,29 +56,30 @@ function s.initial_effect(c)
 
 end
 s.listed_series={0x5003}
+s.listed_names={id}
 Debug.Message("debug active")
 
 function s.activate1(e,tp,eg,ep,ev,re,r,rp)
-	Debug.Message("s.activate1 active")
+	--Debug.Message("s.activate1 active")
 	Duel.NegateSummon(eg)
 	Duel.SendtoHand(eg,nil,REASON_EFFECT)
 end
 
 function s.target1(e,tp,eg,ep,ev,re,r,rp,chk)
-	Debug.Message("s.target1 active")
+	--Debug.Message("s.target1 active")
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_DISABLE_SUMMON,eg,#eg,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,eg,#eg,0,0)
 end
 
 function s.cost1(e,tp,eg,ep,ev,re,r,rp,chk)
-	Debug.Message("s.cost1 active")
+	--Debug.Message("s.cost1 active")
 	if chk==0 then return e:GetHandler():IsCanRemoveCounter(tp,0x300,1,REASON_COST) end
 	e:GetHandler():RemoveCounter(tp,0x300,1,REASON_COST)
 end
 
 function s.condition1(e,tp,eg,ep,ev,re,r,rp)
-	Debug.Message("s.condition1 active")
+	--Debug.Message("s.condition1 active")
 	return Duel.GetCurrentChain(true)==0
 end
 
