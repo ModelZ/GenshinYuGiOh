@@ -97,26 +97,26 @@ function s.tgfilter(c)
 end
 
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	--Debug.Message("s.condition active")
+	Debug.Message("s.condition active")
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chkc then Debug.Message("chkc active") end
+	if chkc then return true end
 	if chk == 0 then 
 	--Debug.Message("chk == 0 active")
 	--return Duel.IsExistingMatchingCard(s.tgfilter,tp,0,LOCATION_MZONE,1,nil)
 	return true --always add at least Counter
 	end
 
-	--Debug.Message("s.target active")
+	Debug.Message("s.target active")
 	--local tg=Duel.SelectMatchingCard(tp,s.tgfilter,tp,0,LOCATION_MZONE,1,1,nil)
 	--Debug.Message(tg)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,0,0)
 end
 
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	--Debug.Message("s.activate active")
+	Debug.Message("s.activate active")
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 	local tg=Duel.SelectMatchingCard(tp,s.tgfilter,tp,0,LOCATION_MZONE,1,1,nil)
 	--Debug.Message(tg)
