@@ -102,7 +102,7 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	--if chkc then Debug.Message("chkc active") end
+	if chkc then Debug.Message("chkc active") end
 	if chk == 0 then 
 	--Debug.Message("chk == 0 active")
 	--return Duel.IsExistingMatchingCard(s.tgfilter,tp,0,LOCATION_MZONE,1,nil)
