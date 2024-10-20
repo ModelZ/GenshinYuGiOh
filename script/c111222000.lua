@@ -56,7 +56,7 @@ end
 
 -- Select target for returning to hand
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsExistingMatchingCard(s.tgfilter,tp,0,LOCATION_MZONE,1,nil) end
+    if chk==0 then return true end
     Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,0,0)
 end
 
