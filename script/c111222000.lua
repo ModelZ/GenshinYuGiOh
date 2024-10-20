@@ -56,7 +56,6 @@ function s.initial_effect(c)
 
 end
 s.listed_series={0x5003}
-s.listed_names={id}
 Debug.Message("debug active")
 
 function s.activate1(e,tp,eg,ep,ev,re,r,rp)
