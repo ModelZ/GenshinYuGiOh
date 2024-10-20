@@ -36,8 +36,10 @@ function c111222001.initial_effect(c)
     e4:SetRange(LOCATION_MZONE)
     e4:SetCountLimit(1,id+2) -- Once per turn restriction
     e4:SetCondition(s.fusioncondition) -- condition to check for 2+ "Genshin" monsters
-    e4:SetTarget(s.fusiontarget) -- fusion target selection
-    e4:SetOperation(s.fusionactivate) -- fusion summon operation
+    -- Fusion Summon using predefined fusion parameters
+    local fusparams = {fusfilter=Fusion.OnFieldMatFilter(Card.IsSetCard,0x700), extrafil=nil, extraop=nil, gc=nil, chkf=tp}
+    e4:SetTarget(Fusion.SummonEffTG(fusparams))
+    e4:SetOperation(Fusion.SummonEffOP(fusparams))
     c:RegisterEffect(e4)
 
 end
@@ -91,19 +93,4 @@ end
 -- Condition: Control 2 or more "Genshin" monsters
 function s.fusioncondition(e,tp,eg,ep,ev,re,r,rp)
     return Duel.GetMatchingGroupCount(Card.IsSetCard,tp,LOCATION_MZONE,0,nil,0x700)>=2
-end
-
--- Target: Fusion summon 1 "Genshin" monster using hand/field as materials
-function s.fusiontarget(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsExistingMatchingCard(s.fusionfilter1,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
-    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
-end
-
--- Operation: Fusion summon using materials from hand/field
-function s.fusionactivate(e,tp,eg,ep,ev,re,r,rp)
-    local mg=Duel.SelectMatchingCard(tp,s.fusionfilter1,tp,LOCATION_HAND+LOCATION_MZONE,0,1,99,nil)
-    if #mg>0 then
-        local sg=Duel.SelectFusionMaterial(tp,nil,mg,nil)
-        Duel.SpecialSummon(sg,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
-    end
 end
