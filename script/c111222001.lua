@@ -87,7 +87,7 @@ function s.activate1(e,tp,eg,ep,ev,re,r,rp)
 end
 -- Filter for fusion
 function s.fusionfilter1(c,e,tp)
-    return c:IsSetCard(0x700) and c:IsCanBeFusionMaterial() -- Assuming 0x700 is the "Genshin" archetype set code
+    return c:IsSetCard(0x700) and c:IsCanBeFusionMaterial() and c:GetLocation() ~= LOCATION_EXTRA -- Assuming 0x700 is the "Genshin" archetype set code
 end
 
 -- Condition: Control 2 or more "Genshin" monsters
