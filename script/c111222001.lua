@@ -83,6 +83,10 @@ function s.activate1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
+-- Filter for fusion
+function s.fusionfilter1(c,e,tp)
+    return c:IsSetCard(0x700) and c:IsCanBeFusionMaterial() -- Assuming 0x700 is the "Genshin" archetype set code
+end
 
 -- Condition: Control 2 or more "Genshin" monsters
 function s.fusioncondition(e,tp,eg,ep,ev,re,r,rp)
@@ -91,13 +95,13 @@ end
 
 -- Target: Fusion summon 1 "Genshin" monster using hand/field as materials
 function s.fusiontarget(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsExistingMatchingCard(aux.FusionFilter1,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
+    if chk==0 then return Duel.IsExistingMatchingCard(s.fusionfilter1,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 
 -- Operation: Fusion summon using materials from hand/field
 function s.fusionactivate(e,tp,eg,ep,ev,re,r,rp)
-    local mg=Duel.SelectMatchingCard(tp,aux.FusionFilter1,tp,LOCATION_HAND+LOCATION_MZONE,0,1,99,nil)
+    local mg=Duel.SelectMatchingCard(tp,s.fusionfilter1,tp,LOCATION_HAND+LOCATION_MZONE,0,1,99,nil)
     if #mg>0 then
         local sg=Duel.SelectFusionMaterial(tp,nil,mg,nil)
         Duel.SpecialSummon(sg,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
