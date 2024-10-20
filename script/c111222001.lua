@@ -46,7 +46,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 -- If other "Genshin" Monster effect is activated
-function s.condition1(e,tp,eg,ep,ev,re,r,rp)
+function s.condition1(e,tp,eg,ep,ev,re,r,rp,c)
 	Debug.Message("s.condition1 active")
 	return re:IsActiveType(TYPE_MONSTER) and re:IsSetCard(0x700)
 end
