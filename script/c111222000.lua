@@ -62,10 +62,13 @@ end
 
 -- Execute return and counter placement
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
+    -- Place 1 Lullaby Counter on this card (always)
+    e:GetHandler():AddCounter(0x300,1)
+    
+    -- Now try to return an opponent's monster to hand
     local g=Duel.SelectMatchingCard(tp,s.tgfilter,tp,0,LOCATION_MZONE,1,1,nil)
     if #g>0 then
         Duel.SendtoHand(g,nil,REASON_EFFECT) -- return selected monster to hand
-        e:GetHandler():AddCounter(0x300,1) -- place 1 Lullaby Counter on this card
     end
 end
 
