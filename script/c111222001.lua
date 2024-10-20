@@ -17,16 +17,29 @@ function c111222001.initial_effect(c)
     c:RegisterEffect(e2)
     -- If other "Genshin" Monster effect is activated (Quick Effect): You can Special Summon 1 "Genshin" monster from your Deck. 
     local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(id,3))
+	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_CHAIN_SOLVED)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetRange(LOCATION_MZONE)
+    e3:SetCountLimit(1,id)
 	e3:SetCondition(s.condition1)
 	e3:SetTarget(s.target1)
 	e3:SetOperation(s.activate1)
 	c:RegisterEffect(e3)
+    -- If you control 2 or more "Genshin" Monster on the field, you can activate this effect: Fusion Summon 1 "Genshin" Monster, using monsters from your hand or field as Fusion Material.
+    local e4=Effect.CreateEffect(c)
+    e4:SetDescription(aux.Stringid(id,2))
+    e4:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
+    e4:SetType(EFFECT_TYPE_IGNITION)
+    e4:SetRange(LOCATION_MZONE)
+    e4:SetCountLimit(1,id) -- Once per turn restriction
+    e4:SetCondition(s.fusioncondition) -- condition to check for 2+ "Genshin" monsters
+    e4:SetTarget(s.fusiontarget) -- fusion target selection
+    e4:SetOperation(s.fusionactivate) -- fusion summon operation
+    c:RegisterEffect(e4)
+
 end
 s.listed_series={0x3700}
 s.listed_names={id}
@@ -69,4 +82,24 @@ function s.activate1(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
+end
+
+-- Condition: Control 2 or more "Genshin" monsters
+function s.fusioncondition(e,tp,eg,ep,ev,re,r,rp)
+    return Duel.GetMatchingGroupCount(Card.IsSetCard,tp,LOCATION_MZONE,0,nil,0x700)>=2
+end
+
+-- Target: Fusion summon 1 "Genshin" monster using hand/field as materials
+function s.fusiontarget(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return Duel.IsExistingMatchingCard(aux.FusionFilter1,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil) end
+    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
+end
+
+-- Operation: Fusion summon using materials from hand/field
+function s.fusionactivate(e,tp,eg,ep,ev,re,r,rp)
+    local mg=Duel.SelectMatchingCard(tp,aux.FusionFilter1,tp,LOCATION_HAND+LOCATION_MZONE,0,1,99,nil)
+    if #mg>0 then
+        local sg=Duel.SelectFusionMaterial(tp,nil,mg,nil)
+        Duel.SpecialSummon(sg,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
+    end
 end
