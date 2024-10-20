@@ -23,7 +23,7 @@ function c111222001.initial_effect(c)
 	e3:SetCode(EVENT_CHAIN_SOLVED)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetRange(LOCATION_MZONE)
-    e3:SetCountLimit(1,id)
+    e3:SetCountLimit(1,id+1)
 	e3:SetCondition(s.condition1)
 	e3:SetTarget(s.target1)
 	e3:SetOperation(s.activate1)
@@ -34,7 +34,7 @@ function c111222001.initial_effect(c)
     e4:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
     e4:SetType(EFFECT_TYPE_IGNITION)
     e4:SetRange(LOCATION_MZONE)
-    e4:SetCountLimit(1,id) -- Once per turn restriction
+    e4:SetCountLimit(1,id+2) -- Once per turn restriction
     e4:SetCondition(s.fusioncondition) -- condition to check for 2+ "Genshin" monsters
     e4:SetTarget(s.fusiontarget) -- fusion target selection
     e4:SetOperation(s.fusionactivate) -- fusion summon operation
