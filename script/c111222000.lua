@@ -26,19 +26,30 @@ function s.initial_effect(c)
     e2:SetOperation(s.acop) -- add 1 Lullaby counter on resolution
     c:RegisterEffect(e2)
 
-    -- Negate a summon using Lullaby Counter
-    local e4=Effect.CreateEffect(c)
-    e4:SetDescription(aux.Stringid(id,3))
-    e4:SetCategory(CATEGORY_DISABLE_SUMMON+CATEGORY_TOHAND)
-    e4:SetType(EFFECT_TYPE_QUICK_O)
-    e4:SetCode(EVENT_SUMMON)
-    e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL+EFFECT_FLAG_NO_TURN_RESET)
-    e4:SetRange(LOCATION_MZONE)
-    e4:SetCondition(s.condition1) -- condition to check summon
-    e4:SetCost(s.cost1) -- cost to remove counter
-    e4:SetTarget(s.target1) -- negate summon and return monster to hand
-    e4:SetOperation(s.activate1)
-    c:RegisterEffect(e4)
+	-- Negate any summon using Lullaby Counter
+	local e4=Effect.CreateEffect(c)
+	e4:SetDescription(aux.Stringid(id,3))
+	e4:SetCategory(CATEGORY_DISABLE_SUMMON+CATEGORY_TOHAND)
+	e4:SetType(EFFECT_TYPE_QUICK_O)
+	e4:SetCode(EVENT_SUMMON) -- Normal Summon
+	e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL+EFFECT_FLAG_NO_TURN_RESET)
+	e4:SetRange(LOCATION_MZONE)
+	e4:SetCondition(s.condition1) -- condition to check summon
+	e4:SetCost(s.cost1) -- cost to remove counter
+	e4:SetTarget(s.target1) -- negate summon and return monster to hand
+	e4:SetOperation(s.activate1)
+	c:RegisterEffect(e4)
+
+	-- Add effect for Flip Summons
+	local e5=e4:Clone()
+	e5:SetCode(EVENT_FLIP_SUMMON) -- Flip Summon
+	c:RegisterEffect(e5)
+
+	-- Add effect for Special Summons
+	local e6=e4:Clone()
+	e6:SetCode(EVENT_SPSUMMON) -- Special Summon
+	c:RegisterEffect(e6)
+
 end
 
 -- Fusion filters for "Fontaine" monster and "Genshin" WATER monster
