@@ -1,3 +1,5 @@
+-- Furina De Fontaine
+local s,id=GetID()
 function s.initial_effect(c)
     c:EnableCounterPermit(0x300) -- Can Place Counter 
     c:EnableReviveLimit() -- Limit monster revive
