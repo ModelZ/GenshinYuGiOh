@@ -46,10 +46,11 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 -- If other "Genshin" Monster effect is activated
-function s.condition1(e,tp,eg,ep,ev,re,r,rp,c)
-	Debug.Message("s.condition1 active")
-	return re:IsActiveType(TYPE_MONSTER) and c:IsSetCard(0x700)
+function s.condition1(e,tp,eg,ep,ev,re,r,rp)
+    local c=re:GetHandler() -- The card whose effect is being activated
+    return re:IsActiveType(TYPE_MONSTER) and c:IsSetCard(0x700) and c~=e:GetHandler() 
 end
+
 -- only "Genshin" Monster
 function s.filter1(c,e,tp)
 	return c:IsSetCard(0x700) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
