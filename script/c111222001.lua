@@ -48,7 +48,7 @@ end
 -- If other "Genshin" Monster effect is activated
 function s.condition1(e,tp,eg,ep,ev,re,r,rp)
 	Debug.Message("s.condition1 active")
-	return re:IsActiveType(TYPE_MONSTER) and c:IsSetCard(0x700)
+	return re:IsActiveType(TYPE_MONSTER) and re:IsSetCard(0x700)
 end
 -- only "Genshin" Monster
 function s.filter1(c,e,tp)
