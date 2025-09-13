@@ -1,7 +1,6 @@
 @echo off 
 
 :: Author : ModelZ
-:: Copyright (c) SOmapait.com
 :: Script: Lazy Git Script
 
 git add .
