@@ -73,7 +73,7 @@ end
 
 --Condition for destroying a card: when another "Genshin" monster's effect is activated
 function s.descon(e,tp,eg,ep,ev,re,r,rp)
-	return re:IsActiveType(TYPE_MONSTER) and re:GetHandler():IsSetCard(0x5700) and re:GetHandler()~=e:GetHandler()
+	return re:IsActiveType(TYPE_MONSTER) and re:GetHandler():IsSetCard(0x700) and re:GetHandler()~=e:GetHandler()
 end
 --Activation requirement for destroying a card
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
