@@ -20,7 +20,7 @@ function c111222001.initial_effect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e3:SetCode(EVENT_CHAIN_SOLVED)
+	e3:SetCode(EVENT_CHAINING)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetRange(LOCATION_MZONE)
     e3:SetCountLimit(1,id+1)
@@ -43,8 +43,7 @@ function c111222001.initial_effect(c)
     c:RegisterEffect(e4)
 
 end
-s.listed_series={0x3700}
-s.listed_names={id}
+s.listed_series={0x700}
 -- Search a "Genshin" monster
 function s.filter(c)
 	return c:IsSetCard(0x700) and c:IsAbleToHand() and c:IsType(TYPE_MONSTER)
@@ -63,11 +62,11 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 end
 -- If another "Genshin" Monster effect is activated (ignores itself)
 function s.condition1(e,tp,eg,ep,ev,re,r,rp)
-    local c=re:GetHandler()
-    -- Must be a monster, "Genshin" series, and not this card itself
-    return re:IsActiveType(TYPE_MONSTER) and c:IsSetCard(0x700) and c~=e:GetHandler() and re:GetHandler():IsControler(tp)
+    local rc = re:GetHandler()
+    return rc and rc:IsSetCard(0x700)      -- Must be a "Genshin" monster
+       and rc:IsType(TYPE_MONSTER)         -- Must be a monster
+       and rc ~= e:GetHandler()            -- Must not be this card
 end
-
 
 -- only "Genshin" Monster
 function s.filter1(c,e,tp)
