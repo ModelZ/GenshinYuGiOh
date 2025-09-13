@@ -61,11 +61,13 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,g)
 	end
 end
--- If other "Genshin" Monster effect is activated
+-- If another "Genshin" Monster effect is activated (ignores itself)
 function s.condition1(e,tp,eg,ep,ev,re,r,rp)
-    local c=re:GetHandler() -- The card whose effect is being activated
-    return re:IsActiveType(TYPE_MONSTER) and c:IsSetCard(0x700) and c~=e:GetHandler() 
+    local c=re:GetHandler()
+    -- Must be a monster, "Genshin" series, and not this card itself
+    return re:IsActiveType(TYPE_MONSTER) and c:IsSetCard(0x700) and c~=e:GetHandler() and re:GetHandler():IsControler(tp)
 end
+
 
 -- only "Genshin" Monster
 function s.filter1(c,e,tp)
