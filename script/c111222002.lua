@@ -25,17 +25,19 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 
 	--Destroy 1 card on the field when another "Genshin" monster effect is activated
-	local e4=Effect.CreateEffect(c)
-	e4:SetDescription(aux.Stringid(id,1))
-	e4:SetCategory(CATEGORY_DESTROY)
-	e4:SetType(EFFECT_TYPE_QUICK_O)
-	e4:SetCode(EVENT_CHAINING)
-	e4:SetProperty(EFFECT_FLAG_DELAY)
-    e4:SetCountLimit(1,id+1)
-	e4:SetCondition(s.descon)
-	e4:SetTarget(s.destg)
-	e4:SetOperation(s.desop)
-	c:RegisterEffect(e4)
+    local e4 = Effect.CreateEffect(c)
+    e4:SetDescription(aux.Stringid(id,1))
+    e4:SetCategory(CATEGORY_DESTROY)
+    e4:SetType(EFFECT_TYPE_QUICK_O)
+    e4:SetCode(EVENT_CHAINING)
+    e4:SetProperty(EFFECT_FLAG_CARD_TARGET + EFFECT_FLAG_DELAY)
+    e4:SetRange(LOCATION_MZONE)
+    e4:SetCountLimit(1, id+1)  -- once per turn
+    e4:SetCondition(s.descon)
+    e4:SetTarget(s.destg)
+    e4:SetOperation(s.desop)
+    c:RegisterEffect(e4)
+
 
 	--Fusion Summon 1 "Genshin" monster
 	local e5=Effect.CreateEffect(c)
@@ -71,24 +73,32 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
---Condition for destroying a card: when another "Genshin" monster's effect is activated
+-- Trigger only if another "Genshin" monster (not this card) activates its effect
 function s.descon(e,tp,eg,ep,ev,re,r,rp)
-    Debug.Message("conditon passed")
-	return re:IsActiveType(TYPE_MONSTER) and re:GetHandler():IsSetCard(0x700) and re:GetHandler()~=e:GetHandler()
+    Debug.Message("condition passed")
+    local rc = re:GetHandler()
+    return rc and rc:IsSetCard(0x700)      -- Must be a "Genshin" monster
+       and rc:IsType(TYPE_MONSTER)         -- Must be a monster
+       and rc ~= e:GetHandler()            -- Must not be this card
 end
+
 --Activation requirement for destroying a card
-function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,0,0)
+function s.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+    if chkc then return chkc:IsOnField() end
+    if chk==0 then return Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+    local g = Duel.SelectTarget(tp, aux.TRUE, tp, LOCATION_ONFIELD, LOCATION_ONFIELD, 1, 1, nil)
+    Duel.SetOperationInfo(0, CATEGORY_DESTROY, g, 1, 0, 0)
 end
+
 --Operation for destroying a card
 function s.desop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectMatchingCard(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
-	if #g>0 then
-		Duel.Destroy(g,REASON_EFFECT)
-	end
+    local tc = Duel.GetFirstTarget()
+    if tc and tc:IsRelateToEffect(e) then
+        Duel.Destroy(tc, REASON_EFFECT)
+    end
 end
+
 
 --Condition for Fusion Summon: if you control 2 or more "Genshin" monsters
 function s.fuscon(e,tp,eg,ep,ev,re,r,rp)
