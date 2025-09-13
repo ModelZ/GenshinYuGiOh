@@ -45,8 +45,9 @@ function c111222001.initial_effect(c)
 end
 s.listed_series={0x3700}
 s.listed_names={id}
+-- Search a "Genshin" monster
 function s.filter(c)
-	return c:IsSetCard(0x700) and c:IsAbleToHand()
+	return c:IsSetCard(0x700) and c:IsAbleToHand() and c:IsType(TYPE_MONSTER)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,nil) end
