@@ -8,17 +8,19 @@ function s.initial_effect(c)
 	e1:SetValue(1)
 	c:RegisterEffect(e1)
 
-	--Add 1 "Genshin" Spell/Trap from Deck to Hand when Summoned
+	-- Add 1 "Genshin" Spell/Trap from Deck to Hand when Summoned
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
 	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_SUMMON_SUCCESS)
-	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_ONCE_PER_TURN)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+    e2:SetCountLimit(1,id)
 	e2:SetTarget(s.thtg)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
 	local e3=e2:Clone()
+    -- Trigger also on Special Summon
 	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e3)
 
@@ -28,7 +30,8 @@ function s.initial_effect(c)
 	e4:SetCategory(CATEGORY_DESTROY)
 	e4:SetType(EFFECT_TYPE_QUICK_O)
 	e4:SetCode(EVENT_CHAINING)
-	e4:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_ONCE_PER_TURN)
+	e4:SetProperty(EFFECT_FLAG_DELAY)
+    e4:SetCountLimit(1,id+1)
 	e4:SetCondition(s.descon)
 	e4:SetTarget(s.destg)
 	e4:SetOperation(s.desop)
@@ -40,7 +43,7 @@ function s.initial_effect(c)
 	e5:SetCategory(CATEGORY_FUSION_SUMMON)
 	e5:SetType(EFFECT_TYPE_IGNITION)
 	e5:SetRange(LOCATION_MZONE)
-	e5:SetProperty(EFFECT_FLAG_ONCE_PER_TURN)
+	e5:SetCountLimit(1,id+2)
 	e5:SetCondition(s.fuscon)
 	e5:SetTarget(s.fustg)
 	e5:SetOperation(s.fusop)
@@ -51,7 +54,7 @@ s.listed_names={id}
 
 --Filter for "Genshin" Spell/Trap cards
 function s.thfilter(c)
-	return c:IsSetCard(0x5700) and c:IsSpellTrap() and c:IsAbleToHand()
+	return c:IsSetCard(0x700) and c:IsSpellTrap() and c:IsAbleToHand()
 end
 --Activation requirement for adding card to hand
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -88,11 +91,11 @@ end
 
 --Condition for Fusion Summon: if you control 2 or more "Genshin" monsters
 function s.fuscon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetMatchingGroupCount(Card.IsSetCard,tp,LOCATION_MZONE,0,nil,0x5700)>=2
+	return Duel.GetMatchingGroupCount(Card.IsSetCard,tp,LOCATION_MZONE,0,nil,0x700)>=2
 end
 --Filter for "Genshin" Fusion Monsters
 function s.fusfilter(c,e,tp,m,f,chkf)
-	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x5700) and (not f or f(c))
+	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x700) and (not f or f(c))
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) and c:CheckFusionMaterial(m,nil,chkf)
 end
 --Activation requirement for Fusion Summon
