@@ -42,7 +42,7 @@ function s.initial_effect(c)
 	--Fusion Summon 1 "Genshin" monster
 	local e5=Effect.CreateEffect(c)
 	e5:SetDescription(aux.Stringid(id,2))
-	e5:SetCategory(CATEGORY_FUSION_SUMMON)
+	e5:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
 	e5:SetType(EFFECT_TYPE_IGNITION)
 	e5:SetRange(LOCATION_MZONE)
 	e5:SetCountLimit(1,id+2)
@@ -51,8 +51,7 @@ function s.initial_effect(c)
 	e5:SetOperation(s.fusop)
 	c:RegisterEffect(e5)
 end
-s.listed_series={0x5700}
-s.listed_names={id}
+s.listed_series={0x700}
 
 --Filter for "Genshin" Spell/Trap cards
 function s.thfilter(c)
