@@ -101,7 +101,7 @@ end
 
 -- Condition to negate summon
 function s.condition1(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.GetCurrentChain()==0 && ep~=tp -- only when opponent is summoning
+    return Duel.GetCurrentChain()==0 and ep~=tp -- only when opponent is summoning
 end
 
 -- Cost to remove counter for summon negation
