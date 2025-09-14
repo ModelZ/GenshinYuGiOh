@@ -14,15 +14,7 @@ function s.initial_effect(c)
     e1:SetOperation(s.chainop)
     c:RegisterEffect(e1)
 
-    -- Place a Akara Counter when other's card place a counter (ignores itself)
-	if not s.global_check then
-        s.global_check=true
-        local ge=Effect.GlobalEffect()
-        ge:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-        ge:SetCode(EVENT_ADD_COUNTER)
-        ge:SetOperation(s.global_acop)
-        Duel.RegisterEffect(ge,0)
-    end
+    
 
 	-- Quick effect: prevent destruction or damage
 	local e4=Effect.CreateEffect(c)
@@ -38,6 +30,16 @@ function s.initial_effect(c)
     -- increase the number of that Counter by the number of removed Akara counter(s)..
 
 end
+
+    -- Place a Akara Counter when other's card place a counter (ignores itself)
+	if not s.global_check then
+        s.global_check=true
+        local ge=Effect.GlobalEffect()
+        ge:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+        ge:SetCode(EVENT_ADD_COUNTER)
+        ge:SetOperation(s.global_acop)
+        Duel.RegisterEffect(ge,0)
+    end
 
 function s.IsExactSet(c,setcode)
     local codes={c:GetSetCard()}
