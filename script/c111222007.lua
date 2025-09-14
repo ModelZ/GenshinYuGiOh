@@ -62,6 +62,7 @@ function s.chainop(e,tp,eg,ep,ev,re,r,rp)
     if rc:IsSetCard(0x700) and rp==tp then
         -- make this chain unrespondable
         Duel.SetChainLimit(aux.FALSE)
+        Debug.Message("Opponent cannot respond to your Genshin card effects!")
         nc:AddCounter(0x301,1)
     end
 end
