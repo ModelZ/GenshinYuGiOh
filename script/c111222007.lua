@@ -14,10 +14,6 @@ function s.initial_effect(c)
     e1:SetOperation(s.chainop)
     c:RegisterEffect(e1)
 
-    local e2=e1:Clone()
-    e2:SetCode(EFFECT_CANNOT_DISEFFECT) -- prevent negation
-    c:RegisterEffect(e2)
-
 	-- Continuous effect: observe counters
     local e3=Effect.CreateEffect(c)
     e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -85,18 +81,18 @@ function s.chainop(e,tp,eg,ep,ev,re,r,rp)
         Duel.SetChainLimit(aux.FALSE)
     end
 end
--- Place a Akara Counter when other's card place a counter (ignores itself)
-function s.acop(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-    -- eg = group of cards that got counters
-    for tc in aux.Next(eg) do
-        if tc~=c then
-            -- Another card got counters → give this card 1 Akara Counter
-            c:AddCounter(0x301,1)
-            break -- only once per event, no matter how many got counters
-        end
-    end
-end
+-- -- Place a Akara Counter when other's card place a counter (ignores itself)
+-- function s.acop(e,tp,eg,ep,ev,re,r,rp)
+--     local c=e:GetHandler()
+--     -- eg = group of cards that got counters
+--     for tc in aux.Next(eg) do
+--         if tc~=c then
+--             -- Another card got counters → give this card 1 Akara Counter
+--             c:AddCounter(0x301,1)
+--             break -- only once per event, no matter how many got counters
+--         end
+--     end
+-- end
 
 function s.damcon(e,tp,eg,ep,ev,re,r,rp)
 	return true -- you can add battle/effect destruction check
