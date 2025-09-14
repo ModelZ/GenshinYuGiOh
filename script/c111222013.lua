@@ -22,9 +22,9 @@ function s.fextra(e,tp,mg)
 end
 
 -- Fusion check: must have at least 1 of your "Genshin" monsters
-function s.fcheck(tp,sg,fc)
-	if not sg then return false end
-	return sg:FilterCount(function(c) return c:IsSetCard(0x700) and c:IsControler(tp) end, nil) >= 1
+function s.fcheck(tp, sg, fc)
+    if not sg or #sg == 0 then return false end
+    return sg:FilterCount(function(c) return c:IsSetCard(0x700) and c:IsControler(tp) end, nil) >= 1
 end
 
 -- Fusion filter: enforce your recipe rules
