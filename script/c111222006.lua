@@ -45,6 +45,7 @@ end
 
 --Fusion materials
 function s.mondstadtfilter(c,fc,sumtype,tp)
+	Debug.Message(c:IsSetCard(0x1700) and c:IsType(TYPE_MONSTER))
 	return c:IsSetCard(0x1700) and c:IsType(TYPE_MONSTER)  -- "Mondstadt" monster (I set 0x701 as example)
 end
 function s.windfilter(c,fc,sumtype,tp)
