@@ -128,6 +128,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
         if rg:GetCount()>0 then summonable:Merge(rg) end
     end
     Debug.Message("Total summonable materials found: " .. summonable:GetCount())
+    Debug.Message("Object" .. e:GetLabelObject())
     if summonable:GetCount()>0 then
         local ct=math.min(ft,summonable:GetCount())
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
