@@ -77,7 +77,7 @@ function s.descon(e,tp,eg,ep,ev,re,r,rp)
 	-- only face-up and on the field
 	local c = e:GetHandler()
     if not c:IsFaceup() or not c:IsLocation(LOCATION_MZONE) then return false end
-	
+	Debug.Message(c:IsFaceup() or not c:IsLocation(LOCATION_MZONE))
     local rc = re:GetHandler()
     return rc and rc:IsSetCard(0x700)      -- Must be a "Genshin" monster
        and rc:IsType(TYPE_MONSTER)         -- Must be a monster
