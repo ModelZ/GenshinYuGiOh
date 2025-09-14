@@ -4,7 +4,7 @@ If this card is fusion summoned: You can return 1 opponent's monster on the fiel
 
 Lesser Lord Kusanali ATK 2500 DEF 1800
 1 "Sumeru" monster + 1 "Genshin" LIGHT monster
-Your opponent cannot activate a card or effect response to your "Genshin" card. You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); increase the number of that Counter by the number of removed Akara counter(s). When other card(s) place a counter, Place 1 Akara Counter on this card. When a card would be destroyed by battle or a card effect (Quick Effect): you can remove 1 Akara Counter instead and take no damage. 
+Your opponent cannot activate a card or effect response to your "Genshin" card. You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); increase the number of that Counter by the number of removed Akara counter(s). When other card(s) leaves the field, Place 1 Akara Counter on this card. When a card would be destroyed by battle or a card effect (Quick Effect): you can remove 1 Akara Counter instead and take no damage. 
 
 Raiden Shogun ATK 3500 DEF 2500 DARK
 1 "Inazuma" monster + 1 "Genshin" DARK monster

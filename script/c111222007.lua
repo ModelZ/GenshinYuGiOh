@@ -58,13 +58,8 @@ end
 -- Place an Akara Counter when another card leaves the field (ignores itself)
 function s.acop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    for tc in aux.Next(eg) do
-        if tc~=c then
-            -- Another card left the field → give this card 1 Akara Counter
-            c:AddCounter(0x301,1)
-            break -- only once per event, no matter how many left
-        end
-    end
+    -- Another card left the field → give this card 1 Akara Counter
+    c:AddCounter(0x301,1)
 end
 
 function s.damcon(e,tp,eg,ep,ev,re,r,rp)
