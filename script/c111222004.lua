@@ -37,26 +37,24 @@ end
 
 -- Negate opponent's monster effect in response to your "Genshin" card effect
 function s.negcon(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-    -- Only opponent's monster effect
-    if rp==tp or not re:IsActiveType(TYPE_MONSTER) then return false end
+    -- Only opponent's card effect
+    if rp==tp or not re:IsActiveType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP) then return false end
     -- Effect must be negatable
     if not Duel.IsChainNegatable(ev) then return false end
 
-    -- Check the previous chain effect (the effect being negated)
-    local prev = Duel.GetChainInfo(ev-2, CHAININFO_TRIGGERING_EFFECT)
-
-    -- If there is no previous effect, return false
-    if prev == nil then return false end
-
+    -- Check previous chain link
+    local prev = Duel.GetChainInfo(ev-1, CHAININFO_TRIGGERING_EFFECT)
     if not prev then return false end
     local rc = prev:GetHandler()
-    -- Must be your Genshin card/effect
-    if rc:GetControler()~=tp or not rc:IsSetCard(0x700) then return false end
 
-    -- Make sure the opponent's monster is still related to its effect
-    return re:GetHandler():IsRelateToEffect(re)
+    -- Must be *a Genshin card controlled by the same player as this effect's owner*
+    if rc:IsControler(tp) and rc:IsSetCard(0x700) then
+        return true
+    end
+
+    return false
 end
+
 
 function s.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return e:GetHandler():IsDiscardable() end
