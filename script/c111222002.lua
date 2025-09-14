@@ -78,7 +78,6 @@ function s.descon(e,tp,eg,ep,ev,re,r,rp)
     local c = e:GetHandler()
     if not c:IsFaceup() or not c:IsLocation(LOCATION_MZONE) then return false end
 
-    Debug.Message("descon called")
     local rc = re:GetHandler()
     
     -- Check if the effect is from a "Genshin" monster

@@ -53,9 +53,17 @@ function s.initial_effect(c)
 
 end
 
+function s.IsExactSet(c,setcode)
+    local codes={c:GetSetCard()}
+    for _,v in ipairs(codes) do
+        if v==setcode then return true end
+    end
+    return false
+end
+
 -- Fusion filters for "Fontaine" monster and "Genshin" WATER monster
 function s.fusionfilter1(c)
-    return c:IsSetCard(0x5700) -- Fontaine monsters
+    return s.IsExactSet(c,0x5700) and c:IsType(TYPE_MONSTER) -- Fontaine monsters
 end
 function s.fusionfilter2(c)
     return c:IsSetCard(0x700) and c:IsAttribute(ATTRIBUTE_WATER) -- Genshin WATER monsters
