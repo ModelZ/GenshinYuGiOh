@@ -25,18 +25,18 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 
 	--Destroy 1 card on the field when another "Genshin" monster effect is activated
-    local e4 = Effect.CreateEffect(c)
-    e4:SetDescription(aux.Stringid(id,1))
-    e4:SetCategory(CATEGORY_DESTROY)
-    e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_QUICK_O)
-    e4:SetCode(EVENT_CHAINING)
-    e4:SetProperty(EFFECT_FLAG_CARD_TARGET + EFFECT_FLAG_DELAY)
-    e4:SetRange(LOCATION_FZONE)
-    e4:SetCountLimit(1,{id,1})  -- once per turn
-    e4:SetCondition(s.descon)
-    e4:SetTarget(s.destg)
-    e4:SetOperation(s.desop)
-    c:RegisterEffect(e4)
+	local e4 = Effect.CreateEffect(c)
+	e4:SetDescription(aux.Stringid(id,1))
+	e4:SetCategory(CATEGORY_DESTROY)
+	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e4:SetCode(EVENT_CHAINING)
+	e4:SetProperty(EFFECT_FLAG_CARD_TARGET + EFFECT_FLAG_DELAY)
+	e4:SetRange(LOCATION_MZONE)  -- Changed to MZONE for monster
+	e4:SetCountLimit(1,{id,1})  -- once per turn
+	e4:SetCondition(s.descon)
+	e4:SetTarget(s.destg)
+	e4:SetOperation(s.desop)
+	c:RegisterEffect(e4)
 
 
 	--Fusion Summon 1 "Genshin" monster
@@ -74,15 +74,20 @@ end
 
 -- Trigger only if another "Genshin" monster (not this card) activates its effect
 function s.descon(e,tp,eg,ep,ev,re,r,rp)
-	-- -- only face-up and on the field
-	-- local c = e:GetHandler()
-    -- if not c:IsFaceup() or not c:IsLocation(LOCATION_MZONE) then return false end
+    -- Ensure this monster is face-up in Monster Zone
+    local c = e:GetHandler()
+    if not c:IsFaceup() or not c:IsLocation(LOCATION_MZONE) then return false end
 
-	-- Debug.Message(not c:IsFaceup() or not c:IsLocation(LOCATION_MZONE))
+    Debug.Message("descon called")
     local rc = re:GetHandler()
+    
+    -- Check if the effect is from a "Genshin" monster
     return rc and rc:IsSetCard(0x700)      -- Must be a "Genshin" monster
        and rc:IsType(TYPE_MONSTER)         -- Must be a monster
-       and rc ~= e:GetHandler()            -- Must not be this card
+       and rc:IsFaceup()                   -- Must be face-up
+       and rc:IsLocation(LOCATION_MZONE)   -- Must be on the field
+       and rc ~= c                         -- Must not be this monster
+       and re:IsActiveType(TYPE_MONSTER)   -- Effect must be monster effect
 end
 
 --Activation requirement for destroying a card
