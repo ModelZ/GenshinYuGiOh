@@ -127,7 +127,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
         local rg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_REMOVED,0,nil)
         if rg:GetCount()>0 then summonable:Merge(rg) end
     end
-    
+    Debug.Message("Total summonable materials found: " .. summonable:GetCount())
     if summonable:GetCount()>0 then
         local ct=math.min(ft,summonable:GetCount())
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
