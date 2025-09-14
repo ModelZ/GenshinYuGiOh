@@ -3,9 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	-- Fusion material
 	c:EnableReviveLimit()
-	Fusion.AddProcMix(c,true,true,
-		function(c) return c:IsSetCard(0x1800) and c:IsType(TYPE_MONSTER) end, -- Sumeru monster, example setcode 0x1800
-		function(c) return c:IsSetCard(0x700) and c:IsAttribute(ATTRIBUTE_LIGHT) end) -- Genshin LIGHT
+	Fusion.AddProcMix(c,true,true,s.sumerufilter,s.lightfilter)
 
 	-- Opponent cannot respond to your Genshin cards
 	local e1=Effect.CreateEffect(c)
@@ -49,6 +47,23 @@ function s.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 
+function s.IsExactSet(c,setcode)
+    local codes={c:GetSetCard()}
+    for _,v in ipairs(codes) do
+        if v==setcode then return true end
+    end
+    return false
+end
+
+--Fusion materials
+function s.sumerufilter(c,fc,sumtype,tp)
+    return s.IsExactSet(c,0x4700) and c:IsType(TYPE_MONSTER)  -- Sumeru monster
+end
+
+function s.lightfilter(c,fc,sumtype,tp)
+	return c:IsSetCard(0x700) and c:IsAttribute(ATTRIBUTE_LIGHT)  -- "Genshin" LIGHT monster
+end
+
 -- Opponent cannot respond to your Genshin cards
 function s.aclimit(e,re,tp)
 	return re:GetHandler():IsSetCard(0x700)
@@ -60,10 +75,10 @@ function s.qcond(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.qcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return c:GetCounter(0x1)>0 end -- example Akara Counter ID=0x1
+	if chk==0 then return c:GetCounter(0x301)>0 end -- example Akara Counter ID=0x301
 	-- remove counters as cost
-	local ct=c:GetCounter(0x1)
-	c:RemoveCounter(tp,0x1,ct,REASON_COST)
+	local ct=c:GetCounter(0x301)
+	c:RemoveCounter(tp,0x301,ct,REASON_COST)
 	e:SetLabel(ct)
 end
 function s.qtg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -75,13 +90,13 @@ function s.qop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,Card.IsFaceup,tp,LOCATION_MZONE,0,1,1,nil)
 	if g:GetCount()>0 then
 		local tc=g:GetFirst()
-		tc:AddCounter(0x1,ct)
+		tc:AddCounter(0x301,ct)
 	end
 end
 
 function s.addcounter(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	c:AddCounter(0x1,1)
+	c:AddCounter(0x301,1)
 end
 
 function s.damcon(e,tp,eg,ep,ev,re,r,rp)
@@ -89,8 +104,8 @@ function s.damcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.damcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return c:GetCounter(0x1)>0 end
-	c:RemoveCounter(tp,0x1,1,REASON_COST)
+	if chk==0 then return c:GetCounter(0x301)>0 end
+	c:RemoveCounter(tp,0x301,1,REASON_COST)
 end
 function s.damop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ChangeBattleDamage(tp,0)
