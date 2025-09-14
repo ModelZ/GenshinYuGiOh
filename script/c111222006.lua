@@ -45,7 +45,7 @@ end
 
 --Fusion materials
 function s.mondstadtfilter(c,fc,sumtype,tp)
-	return c:IsSetCard(0x701) and c:IsType(TYPE_MONSTER)  -- "Mondstadt" monster (I set 0x701 as example)
+	return c:IsSetCard(0x1700) and c:IsType(TYPE_MONSTER)  -- "Mondstadt" monster (I set 0x701 as example)
 end
 function s.windfilter(c,fc,sumtype,tp)
 	return c:IsSetCard(0x700) and c:IsAttribute(ATTRIBUTE_WIND)  -- "Genshin" WIND monster
