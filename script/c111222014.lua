@@ -1,5 +1,5 @@
 --My Brother's
---Scripted by ModelZ
+--Scripted by [Your Name]
 local s,id=GetID()
 function s.initial_effect(c)
 	--Special Summon fusion materials when Genshin Fusion monster leaves field
@@ -42,27 +42,49 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	return false
 end
 
---Target: Check if we can Special Summon the materials
+--Target: Check if we can Special Summon ALL materials
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		local mat=e:GetLabelObject()
 		if not mat then return false end
 		
-		--Check if we can summon at least one material
+		local mat_count=mat:GetCount()
 		local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-		if ft<=0 then return false end
+		if ft<mat_count then return false end --Need exact space for all materials
 		
-		--Check if any materials can be Special Summoned
+		--Check if ALL materials can be found and summoned
 		for tc in aux.Next(mat) do
-			if s.spfilter(tc,e,tp) then
-				return true
+			local found=false
+			--Check Hand
+			local hg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_HAND,0,nil)
+			if hg:GetCount()>0 then found=true end
+			
+			--Check Graveyard
+			if not found then
+				local gg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_GRAVE,0,nil)
+				if gg:GetCount()>0 then found=true end
 			end
+			
+			--Check Banished
+			if not found then
+				local rg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_REMOVED,0,nil)
+				if rg:GetCount()>0 then found=true end
+			end
+			
+			--Check Deck
+			if not found then
+				local dg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_DECK,0,nil)
+				if dg:GetCount()>0 then found=true end
+			end
+			
+			--If any material can't be found, can't activate
+			if not found then return false end
 		end
-		return false
+		return true
 	end
 	
 	local mat=e:GetLabelObject()
-	local ct=math.min(mat:GetCount(),Duel.GetLocationCount(tp,LOCATION_MZONE))
+	local ct=mat:GetCount()
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,ct,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED)
 end
 
