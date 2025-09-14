@@ -129,7 +129,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
     end
     Debug.Message("Total summonable materials found: " .. summonable:GetCount())
     Debug.Message("Object" .. mat:GetMaterialCount())
-    if summonable:GetCount()=>mat.GetMaterialCount then
+    if summonable:GetCount()>=mat.GetMaterialCount then
         local ct=math.min(ft,mat.GetMaterialCount())
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
         local sg=mat:Select(tp,1,ct,nil)
