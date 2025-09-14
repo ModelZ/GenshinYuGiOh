@@ -40,7 +40,7 @@ function s.initial_effect(c)
 	e4:SetOperation(s.fusop)
 	c:RegisterEffect(e4)
 end
-s.listed_series={0x700}
+
 -- Search a "Genshin" monster
 function s.filter(c)
 	return c:IsSetCard(0x700) and c:IsAbleToHand() and c:IsType(TYPE_MONSTER)
