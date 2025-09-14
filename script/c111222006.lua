@@ -45,8 +45,11 @@ end
 
 --Fusion materials
 function s.mondstadtfilter(c,fc,sumtype,tp)
-	return c:IsSetCard(0x1700) and c:IsType(TYPE_MONSTER)  -- "Mondstadt" monster (I set 0x701 as example)
+    local setcodes = c:GetSetCard() -- returns table of setcodes
+    if #setcodes ~= 1 then return false end -- must have exactly 1 setcode
+    return setcodes[1] == 0x1700 and c:IsType(TYPE_MONSTER)
 end
+
 function s.windfilter(c,fc,sumtype,tp)
 	return c:IsSetCard(0x700) and c:IsAttribute(ATTRIBUTE_WIND)  -- "Genshin" WIND monster
 end
