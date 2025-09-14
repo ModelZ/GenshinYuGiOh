@@ -43,9 +43,17 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 
+function s.IsExactSet(c,setcode)
+    local codes={c:GetSetCard()}
+    for _,v in ipairs(codes) do
+        if v==setcode then return true end
+    end
+    return false
+end
+
 --Fusion materials
 function s.mondstadtfilter(c,fc,sumtype,tp)
-    return c:IsType(TYPE_MONSTER) and c:GetSetCard() == 0x1700
+    return s.IsExactSet(c,0x1700) and c:IsType(TYPE_MONSTER)
 end
 
 function s.windfilter(c,fc,sumtype,tp)
