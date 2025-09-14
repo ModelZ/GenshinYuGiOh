@@ -101,21 +101,31 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --e3: GY effect
+-- Condition for GY negation effect
 function s.negcon(e,tp,eg,ep,ev,re,r,rp)
-    -- Only opponent's card effect
+    local c=e:GetHandler()
+    -- Must be in GY
+    if not c:IsLocation(LOCATION_GRAVE) then return false end
+    -- Only opponent's effect
     if rp==tp or not re:IsActiveType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP) then return false end
     -- Effect must be negatable
     if not Duel.IsChainNegatable(ev) then return false end
+    -- Effect must be trying to negate something
+    if not (re:IsHasCategory(CATEGORY_NEGATE) or re:IsHasCategory(CATEGORY_DISABLE)) then return false end
 
-    -- Check if this effect is responding to a "Genshin" card effect
+    -- Check if opponent's effect is negating your card or effect
     local prev = Duel.GetChainInfo(ev-1,CHAININFO_TRIGGERING_EFFECT)
-    if not prev then return false end
-    local rc = prev:GetHandler()
-    if not rc:IsSetCard(0x700) and not rc==1-tp then return false end -- 0x700 = "Genshin" archetype
+    if prev then
+        local rc = prev:GetHandler()
+        if rc:IsControler(tp) then
+            -- It's negating your card/effect
+            return true
+        end
+    end
 
-    -- Make sure the opponent's monster is still related to its effect
-    return re:GetHandler():IsRelateToEffect(re)
+    return false
 end
+
 
 function s.costfilter(c)
 	return c:IsSetCard(0x700) and c:IsType(TYPE_MONSTER) and c:IsDiscardable()

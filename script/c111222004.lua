@@ -37,7 +37,7 @@ end
 
 -- Negate opponent's monster effect in response to "Genshin" card effect condition
 function s.negcon(e,tp,eg,ep,ev,re,r,rp)
-    -- Only opponent's monster effect
+    -- Only opponent's card effect
     if rp==tp or not re:IsActiveType(TYPE_MONSTER) then return false end
     -- Effect must be negatable
     if not Duel.IsChainNegatable(ev) then return false end
@@ -46,7 +46,7 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
     local prev = Duel.GetChainInfo(ev-1,CHAININFO_TRIGGERING_EFFECT)
     if not prev then return false end
     local rc = prev:GetHandler()
-    if not rc:IsSetCard(0x700) then return false end -- 0x700 = "Genshin" archetype
+    if not rc:IsSetCard(0x700) and rc==tp then return false end -- 0x700 = "Genshin" archetype
 
     -- Make sure the opponent's monster is still related to its effect
     return re:GetHandler():IsRelateToEffect(re)
