@@ -24,7 +24,7 @@ end
 
 --Check if you control a "Genshin" Fusion Monster
 function s.cfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xgenshin) and c:IsType(TYPE_FUSION)
+	return c:IsFaceup() and c:IsSetCard(0x700) and c:IsType(TYPE_FUSION)
 end
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsChainNegatable(ev) and Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,1,nil)
