@@ -19,11 +19,18 @@ s.listed_series={0x700} -- "Genshin" archetype code
 
 -- Check if a "Genshin" Fusion monster left the field by opponent's card effect
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
+    -- Check if there's a card that left the field
     local tc=eg:GetFirst()
     while tc do
-        if tc:IsControler(tp) and tc:IsSetCard(0x700) and tc:IsType(TYPE_FUSION)
-           and tc:IsPreviousLocation(LOCATION_MZONE)
-           and (r&REASON_EFFECT)~=0 and rp==1-tp then
+        -- Must be your "Genshin" Fusion monster
+        if tc:IsControler(tp) 
+            and tc:IsSetCard(0x700) 
+            and tc:IsType(TYPE_FUSION)
+            and tc:IsPreviousLocation(LOCATION_MZONE)
+            -- Must be removed by opponent's card effect
+            and (r&REASON_EFFECT)~=0
+            and rp==1-tp then
+            -- Store the materials for later use
             local mat=tc:GetMaterial()
             if mat and mat:GetCount()>0 then
                 e:SetLabelObject(mat)
@@ -41,8 +48,9 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
         local mat=e:GetLabelObject()
         if not mat then return false end
         
+        local mat_count=mat:GetCount()
         local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-        if ft<mat:GetCount() then return false end -- Need exact space for all materials
+        if ft<mat_count then return false end -- Need exact space for all materials
         
         -- Check if ALL materials can be found and summoned
         for tc in aux.Next(mat) do
@@ -83,8 +91,8 @@ end
 -- Filter for materials that can be Special Summoned
 function s.spfilter(c,e,tp)
     return c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-       and (c:IsLocation(LOCATION_HAND) or c:IsLocation(LOCATION_DECK)
-       or c:IsLocation(LOCATION_GRAVE) or c:IsLocation(LOCATION_REMOVED))
+        and (c:IsLocation(LOCATION_HAND) or c:IsLocation(LOCATION_DECK) 
+        or c:IsLocation(LOCATION_GRAVE) or c:IsLocation(LOCATION_REMOVED))
 end
 
 -- Operation: Special Summon the fusion materials
