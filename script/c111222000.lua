@@ -1,7 +1,7 @@
 -- Furina De Fontaine
 local s,id=GetID()
 function s.initial_effect(c)
-    c:EnableCounterPermit(0x300) -- Can Place Counter 
+    c:EnableCounterPermit(0x300) -- Can Place Lulaby Counter 
     c:EnableReviveLimit() -- Limit monster revive
     -- Fusion Summon procedure
     Fusion.AddProcMix(c,true,true,s.fusionfilter1,s.fusionfilter2)

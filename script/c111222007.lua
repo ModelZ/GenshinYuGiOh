@@ -3,6 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	-- Fusion material
 	c:EnableReviveLimit()
+    c:EnableCounterPermit(0x301) -- Can Place Akara Counter 
 	Fusion.AddProcMix(c,true,true,s.sumerufilter,s.lightfilter)
 
 	-- Opponent cannot respond to your Genshin cards
@@ -15,26 +16,17 @@ function s.initial_effect(c)
 	e1:SetValue(s.aclimit)
 	c:RegisterEffect(e1)
 
-	-- Quick effect: redistribute Akara Counters
+	-- Add Akara Counters
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,0))
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetCountLimit(1)
-	e2:SetCondition(s.qcond)
-	e2:SetCost(s.qcost)
-	e2:SetTarget(s.qtg)
-	e2:SetOperation(s.qop)
-	c:RegisterEffect(e2)
+    e2:SetDescription(aux.Stringid(id,2))
+    e2:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+    e2:SetCode(EVENT_ADD_COUNTER) -- triggers whenever counters are placed
+    e2:SetRange(LOCATION_MZONE)
+    e2:SetOperation(s.acop)
+    c:RegisterEffect(e2)
 
-	-- Gain Akara Counter when another card places counters
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-	e3:SetCode(EVENT_CUSTOM+id+1) -- custom counter event
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetOperation(s.addcounter)
-	c:RegisterEffect(e3)
+    -- You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); 
+    -- increase the number of that Counter by the number of removed Akara counter(s).
 
 	-- Quick effect: prevent destruction or damage
 	local e4=Effect.CreateEffect(c)
@@ -69,34 +61,17 @@ function s.aclimit(e,re,tp)
 	return re:GetHandler():IsSetCard(0x700)
 end
 
--- Quick effect placeholders
-function s.qcond(e,tp,eg,ep,ev,re,r,rp)
-	return true
-end
-function s.qcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:GetCounter(0x301)>0 end -- example Akara Counter ID=0x301
-	-- remove counters as cost
-	local ct=c:GetCounter(0x301)
-	c:RemoveCounter(tp,0x301,ct,REASON_COST)
-	e:SetLabel(ct)
-end
-function s.qtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-end
-function s.qop(e,tp,eg,ep,ev,re,r,rp)
-	local ct=e:GetLabel()
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	local g=Duel.SelectMatchingCard(tp,Card.IsFaceup,tp,LOCATION_MZONE,0,1,1,nil)
-	if g:GetCount()>0 then
-		local tc=g:GetFirst()
-		tc:AddCounter(0x301,ct)
-	end
-end
-
-function s.addcounter(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	c:AddCounter(0x301,1)
+-- Place a Akara Counter when other's card place a counter (ignores itself)
+function s.acop(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    -- eg = group of cards that got counters
+    for tc in aux.Next(eg) do
+        if tc~=c then
+            -- Another card got counters → give this card 1 Akara Counter
+            c:AddCounter(0x301,1)
+            break -- only once per event, no matter how many got counters
+        end
+    end
 end
 
 function s.damcon(e,tp,eg,ep,ev,re,r,rp)
