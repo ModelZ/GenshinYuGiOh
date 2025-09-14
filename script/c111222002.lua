@@ -31,7 +31,7 @@ function s.initial_effect(c)
     e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_QUICK_O)
     e4:SetCode(EVENT_CHAINING)
     e4:SetProperty(EFFECT_FLAG_CARD_TARGET + EFFECT_FLAG_DELAY)
-    e4:SetRange(LOCATION_MZONE)
+    e4:SetRange(LOCATION_FZONE)
     e4:SetCountLimit(1,{id,1})  -- once per turn
     e4:SetCondition(s.descon)
     e4:SetTarget(s.destg)
