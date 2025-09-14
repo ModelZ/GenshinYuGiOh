@@ -14,13 +14,15 @@ function s.initial_effect(c)
     e1:SetOperation(s.chainop)
     c:RegisterEffect(e1)
 
-	-- Continuous effect: observe counters
-    local e3=Effect.CreateEffect(c)
-    e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-    e3:SetCode(EVENT_ADJUST) -- triggers every game state update
-    e3:SetRange(LOCATION_MZONE)
-    e3:SetOperation(s.observe_counter)
-    c:RegisterEffect(e3)
+    -- Place a Akara Counter when other's card place a counter (ignores itself)
+	if not s.global_check then
+        s.global_check=true
+        local ge=Effect.GlobalEffect()
+        ge:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+        ge:SetCode(EVENT_ADD_COUNTER)
+        ge:SetOperation(s.global_acop)
+        Duel.RegisterEffect(ge,0)
+    end
 
 	-- Quick effect: prevent destruction or damage
 	local e4=Effect.CreateEffect(c)
@@ -35,25 +37,6 @@ function s.initial_effect(c)
     -- You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); 
     -- increase the number of that Counter by the number of removed Akara counter(s)..
 
-end
-
--- Table to store last known counter counts
-s.last_counters = {}
-
--- Observe counters on all face-up cards and add Akara Counter to this card if another card gains counters
-function s.observe_counter(e,tp,eg,ep,ev,re,r,rp)
-    local c = e:GetHandler()
-    local g = Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
-    for tc in aux.Next(g) do
-        local id = tc:GetFieldID()
-        local last = s.last_counters[id] or 0
-        local now = tc:GetCounter(0x301)
-        if tc~=c and now>last then
-            -- Another card gained 1 or more Akara counters → give this card 1 Akara Counter
-            c:AddCounter(0x301,1)
-        end
-        s.last_counters[id] = now
-    end
 end
 
 function s.IsExactSet(c,setcode)
@@ -81,18 +64,19 @@ function s.chainop(e,tp,eg,ep,ev,re,r,rp)
         Duel.SetChainLimit(aux.FALSE)
     end
 end
--- -- Place a Akara Counter when other's card place a counter (ignores itself)
--- function s.acop(e,tp,eg,ep,ev,re,r,rp)
---     local c=e:GetHandler()
---     -- eg = group of cards that got counters
---     for tc in aux.Next(eg) do
---         if tc~=c then
---             -- Another card got counters → give this card 1 Akara Counter
---             c:AddCounter(0x301,1)
---             break -- only once per event, no matter how many got counters
---         end
---     end
--- end
+
+-- Place Akara Counter when any card places a counter
+function s.global_acop(e,tp,eg,ep,ev,re,r,rp)
+    for tc in aux.Next(eg) do
+        -- For every card that gained counters, check if a Nahida exists
+        local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
+        for nc in aux.Next(g) do
+            if nc:IsCode(111222007) and nc~=tc then -- Nahida’s ID
+                nc:AddCounter(0x301,1)
+            end
+        end
+    end
+end
 
 function s.damcon(e,tp,eg,ep,ev,re,r,rp)
 	return true -- you can add battle/effect destruction check
