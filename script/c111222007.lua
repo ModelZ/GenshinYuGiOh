@@ -62,8 +62,6 @@ function s.chainop(e,tp,eg,ep,ev,re,r,rp)
     if rc:IsSetCard(0x700) and rp==tp then
         -- make this chain unrespondable
         Duel.SetChainLimit(aux.FALSE)
-        Debug.Message("Opponent cannot respond to your Genshin card effects!")
-        e:GetHandler():AddCounter(0x301,1)
     end
 end
 
@@ -74,7 +72,8 @@ function s.global_acop(e,tp,eg,ep,ev,re,r,rp)
         local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
         for nc in aux.Next(g) do
             if nc:IsCode(111222007) and nc~=tc then -- Nahida’s ID
-                nc:AddCounter(0x301,1)
+                Debug.Message("Lesser Lord Kusanali places an Akara counter!")
+                e:GetHandler():AddCounter(0x301,1)
             end
         end
     end
