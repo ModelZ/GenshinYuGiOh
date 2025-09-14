@@ -98,10 +98,15 @@ function s.tgfilter(c)
     return c:IsMonster() and c:IsAbleToHand()
 end
 
--- Condition to check if opponent added a card to hand
+-- Condition to check if opponent added a card to hand by draw or search
 function s.thcon(e,tp,eg,ep,ev,re,r,rp)
+    if rp==tp then return false end  -- only opponent's effect
+    if not re then return false end
+    if not (re:IsHasCategory(CATEGORY_DRAW) or re:IsHasCategory(CATEGORY_TOHAND)) then return false end
+    -- Check if the opponent actually added cards to their hand
     return eg:IsExists(Card.IsControler,1,nil,1-tp)
 end
+
 
 -- Place a Lullaby Counter when opponent adds a card (draw/search)
 function s.thop(e,tp,eg,ep,ev,re,r,rp)

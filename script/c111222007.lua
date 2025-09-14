@@ -14,11 +14,11 @@ function s.initial_effect(c)
     e1:SetOperation(s.chainop)
     c:RegisterEffect(e1)
 
-	-- Add Akara Counters
-	local e3=Effect.CreateEffect(c)
+	-- Add Akara Counters when another card leaves the field
+    local e3=Effect.CreateEffect(c)
     e3:SetDescription(aux.Stringid(id,2))
     e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-    e3:SetCode(EVENT_ADD_COUNTER) -- triggers whenever counters are placed
+    e3:SetCode(EVENT_LEAVE_FIELD)  -- trigger when a card leaves the field
     e3:SetRange(LOCATION_MZONE)
     e3:SetOperation(s.acop)
     c:RegisterEffect(e3)
@@ -55,15 +55,14 @@ function s.lightfilter(c,fc,sumtype,tp)
 	return c:IsSetCard(0x700) and c:IsAttribute(ATTRIBUTE_LIGHT)  -- "Genshin" LIGHT monster
 end
 
--- Place a Akara Counter when other's card place a counter (ignores itself)
+-- Place an Akara Counter when another card leaves the field (ignores itself)
 function s.acop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    -- eg = group of cards that got counters
     for tc in aux.Next(eg) do
         if tc~=c then
-            -- Another card got counters → give this card 1 Akara Counter
+            -- Another card left the field → give this card 1 Akara Counter
             c:AddCounter(0x301,1)
-            break -- only once per event, no matter how many got counters
+            break -- only once per event, no matter how many left
         end
     end
 end
