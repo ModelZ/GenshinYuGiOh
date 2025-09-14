@@ -45,7 +45,7 @@ function s.fusioncheck(fc,sg,tp)
 	local oppmon=g2:GetFirst()
 	
 	--Furina De Fontaine: My "Fontaine" monster + opponent monster with WATER attribute
-	if code==12345001 then
+	if code==111222000 then
 		return mymon:IsSetCard(0x5700) and oppmon:IsAttribute(ATTRIBUTE_WATER)
 	end
 	
