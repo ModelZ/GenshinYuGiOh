@@ -18,13 +18,12 @@ function s.initial_effect(c)
     e2:SetCode(EFFECT_CANNOT_DISEFFECT) -- prevent negation
     c:RegisterEffect(e2)
 
-	-- Add Akara Counters
-	local e3=Effect.CreateEffect(c)
-    e3:SetDescription(aux.Stringid(id,2))
-    e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-    e3:SetCode(EVENT_ADD_COUNTER) -- triggers whenever counters are placed
+	-- Continuous effect: observe counters
+    local e3=Effect.CreateEffect(c)
+    e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e3:SetCode(EVENT_ADJUST) -- triggers every game state update
     e3:SetRange(LOCATION_MZONE)
-    e3:SetOperation(s.acop)
+    e3:SetOperation(s.observe_counter)
     c:RegisterEffect(e3)
 
 	-- Quick effect: prevent destruction or damage
@@ -40,6 +39,25 @@ function s.initial_effect(c)
     -- You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); 
     -- increase the number of that Counter by the number of removed Akara counter(s)..
 
+end
+
+-- Table to store last known counter counts
+s.last_counters = {}
+
+-- Observe counters on all face-up cards and add Akara Counter to this card if another card gains counters
+function s.observe_counter(e,tp,eg,ep,ev,re,r,rp)
+    local c = e:GetHandler()
+    local g = Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
+    for tc in aux.Next(g) do
+        local id = tc:GetFieldID()
+        local last = s.last_counters[id] or 0
+        local now = tc:GetCounter(0x301)
+        if tc~=c and now>last then
+            -- Another card gained 1 or more Akara counters → give this card 1 Akara Counter
+            c:AddCounter(0x301,1)
+        end
+        s.last_counters[id] = now
+    end
 end
 
 function s.IsExactSet(c,setcode)
