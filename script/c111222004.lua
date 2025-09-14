@@ -44,7 +44,11 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
     if not Duel.IsChainNegatable(ev) then return false end
 
     -- Check the previous chain effect (the effect being negated)
-    local prev = Duel.GetChainInfo(ev-1, CHAININFO_TRIGGERING_EFFECT)
+    local prev = Duel.GetChainInfo(ev-2, CHAININFO_TRIGGERING_EFFECT)
+
+    -- If there is no previous effect, return false
+    if prev == nil then return false end
+
     if not prev then return false end
     local rc = prev:GetHandler()
     -- Must be your Genshin card/effect
