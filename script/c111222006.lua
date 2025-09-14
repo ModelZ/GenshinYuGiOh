@@ -111,7 +111,7 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
     local prev = Duel.GetChainInfo(ev-1,CHAININFO_TRIGGERING_EFFECT)
     if not prev then return false end
     local rc = prev:GetHandler()
-    if not rc:IsSetCard(0x700) then return false end -- 0x700 = "Genshin" archetype
+    if not rc:IsSetCard(0x700) and not rc==1-tp then return false end -- 0x700 = "Genshin" archetype
 
     -- Make sure the opponent's monster is still related to its effect
     return re:GetHandler():IsRelateToEffect(re)
