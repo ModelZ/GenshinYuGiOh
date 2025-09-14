@@ -8,25 +8,25 @@ function s.initial_effect(c)
 
 	-- Opponent cannot respond to your Genshin cards
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_CANNOT_ACTIVATE)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetTargetRange(0,1)
-	e1:SetValue(s.aclimit)
-	c:RegisterEffect(e1)
+    e1:SetType(EFFECT_TYPE_FIELD)
+    e1:SetCode(EFFECT_CANNOT_INACTIVATE) -- prevent inactivation
+    e1:SetRange(LOCATION_MZONE)
+    e1:SetTargetRange(1,0)
+    e1:SetValue(s.efilter)
+    c:RegisterEffect(e1)
 
-	-- Add Akara Counters
-	local e2=Effect.CreateEffect(c)
-    e2:SetDescription(aux.Stringid(id,2))
-    e2:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-    e2:SetCode(EVENT_ADD_COUNTER) -- triggers whenever counters are placed
-    e2:SetRange(LOCATION_MZONE)
-    e2:SetOperation(s.acop)
+    local e2=e1:Clone()
+    e2:SetCode(EFFECT_CANNOT_DISEFFECT) -- prevent negation
     c:RegisterEffect(e2)
 
-    -- You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); 
-    -- increase the number of that Counter by the number of removed Akara counter(s).
+	-- Add Akara Counters
+	local e3=Effect.CreateEffect(c)
+    e3:SetDescription(aux.Stringid(id,2))
+    e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+    e3:SetCode(EVENT_ADD_COUNTER) -- triggers whenever counters are placed
+    e3:SetRange(LOCATION_MZONE)
+    e3:SetOperation(s.acop)
+    c:RegisterEffect(e3)
 
 	-- Quick effect: prevent destruction or damage
 	local e4=Effect.CreateEffect(c)
@@ -37,6 +37,10 @@ function s.initial_effect(c)
 	e4:SetCost(s.damcost)
 	e4:SetOperation(s.damop)
 	c:RegisterEffect(e4)
+
+    -- You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); 
+    -- increase the number of that Counter by the number of removed Akara counter(s)..
+
 end
 
 function s.IsExactSet(c,setcode)
@@ -57,10 +61,11 @@ function s.lightfilter(c,fc,sumtype,tp)
 end
 
 -- Opponent cannot respond to your Genshin cards
-function s.aclimit(e,re,tp)
-	return re:GetHandler():IsSetCard(0x700)
+function s.efilter(e,ct)
+    local te=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT)
+    local tc=te:GetHandler()
+    return tc:IsSetCard(0x700) and te:GetHandlerPlayer()==e:GetHandlerPlayer()
 end
-
 -- Place a Akara Counter when other's card place a counter (ignores itself)
 function s.acop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
