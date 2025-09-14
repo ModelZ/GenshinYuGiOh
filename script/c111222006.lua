@@ -45,9 +45,7 @@ end
 
 --Fusion materials
 function s.mondstadtfilter(c,fc,sumtype,tp)
-    local setcodes = c:GetSetCard() -- returns table of setcodes
-    if #setcodes ~= 1 then return false end -- must have exactly 1 setcode
-    return setcodes[1] == 0x1700 and c:IsType(TYPE_MONSTER)
+    return c:IsType(TYPE_MONSTER) and c:GetSetCard() == 0x1700
 end
 
 function s.windfilter(c,fc,sumtype,tp)
