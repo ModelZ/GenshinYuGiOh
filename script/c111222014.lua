@@ -1,8 +1,8 @@
---My Brother's
---Scripted by You
+-- My Brother's
+-- Scripted by [Your Name]
 local s,id=GetID()
 function s.initial_effect(c)
-    --Special Summon fusion materials when Genshin Fusion monster leaves field
+    -- Special Summon fusion materials when Genshin Fusion monster leaves field
     local e1=Effect.CreateEffect(c)
     e1:SetDescription(aux.Stringid(id,0))
     e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -15,98 +15,117 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 end
 
-s.listed_series={0x700} --"Genshin" archetype
+s.listed_series={0x700} -- "Genshin" archetype code
 
--- Store material info for multiple Fusion monsters leaving the field
-local fusionMatGroups = {}
-
---Condition: check if any "Genshin" Fusion monster left by opponent's effect
+-- Check if a "Genshin" Fusion monster left the field by opponent's card effect
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-    fusionMatGroups={} -- reset each activation
-    local trigger=false
-    for tc in aux.Next(eg) do
-        if tc:IsPreviousLocation(LOCATION_MZONE)
-            and tc:IsType(TYPE_FUSION)
-            and tc:IsSetCard(0x700)
-            and tc:GetPreviousControler()==tp
-            and (r&REASON_EFFECT)~=0
-            and rp==1-tp then
-
+    local tc=eg:GetFirst()
+    while tc do
+        if tc:IsControler(tp) and tc:IsSetCard(0x700) and tc:IsType(TYPE_FUSION)
+           and tc:IsPreviousLocation(LOCATION_MZONE)
+           and (r&REASON_EFFECT)~=0 and rp==1-tp then
             local mat=tc:GetMaterial()
-            if mat and #mat>0 then
-                table.insert(fusionMatGroups, mat)
-                trigger=true
+            if mat and mat:GetCount()>0 then
+                e:SetLabelObject(mat)
+                return true
             end
         end
+        tc=eg:GetNext()
     end
-    -- store all groups in effect
-    if trigger then e:SetLabelObject(fusionMatGroups) end
-    return trigger
+    return false
 end
 
---Target function: check if all materials can be Special Summoned
+-- Target: Check if we can Special Summon ALL materials
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then
-        local groups=e:GetLabelObject()
-        if not groups or #groups==0 then return false end
+        local mat=e:GetLabelObject()
+        if not mat then return false end
+        
         local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-        local total=0
-        for _,mat in ipairs(groups) do
-            local summonable=mat:Filter(function(c,e,tp)
-                return c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-            end,nil,e,tp)
-            total=total+#summonable
+        if ft<mat:GetCount() then return false end -- Need exact space for all materials
+        
+        -- Check if ALL materials can be found and summoned
+        for tc in aux.Next(mat) do
+            local found=false
+            -- Check Hand
+            local hg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_HAND,0,nil)
+            if hg:GetCount()>0 then found=true end
+            
+            -- Check Graveyard
+            if not found then
+                local gg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_GRAVE,0,nil)
+                if gg:GetCount()>0 then found=true end
+            end
+            
+            -- Check Banished
+            if not found then
+                local rg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_REMOVED,0,nil)
+                if rg:GetCount()>0 then found=true end
+            end
+            
+            -- Check Deck
+            if not found then
+                local dg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_DECK,0,nil)
+                if dg:GetCount()>0 then found=true end
+            end
+            
+            -- If any material can't be found, can't activate
+            if not found then return false end
         end
-        return ft>0 and total>0
+        return true
     end
-
-    local groups=e:GetLabelObject()
-    local count=0
-    for _,mat in ipairs(groups) do
-        count=count+#mat
-    end
-    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,count,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED)
+    
+    local mat=e:GetLabelObject()
+    local ct=mat:GetCount()
+    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,ct,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED)
 end
 
---Operation: Special Summon all stored materials from all zones
+-- Filter for materials that can be Special Summoned
+function s.spfilter(c,e,tp)
+    return c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+       and (c:IsLocation(LOCATION_HAND) or c:IsLocation(LOCATION_DECK)
+       or c:IsLocation(LOCATION_GRAVE) or c:IsLocation(LOCATION_REMOVED))
+end
+
+-- Operation: Special Summon the fusion materials
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-    local groups=e:GetLabelObject()
-    if not groups or #groups==0 then return end
+    local mat=e:GetLabelObject()
+    if not mat then return end
+    
     local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
     if ft<=0 then return end
-
-    local toSummon=Group.CreateGroup()
-
-    for _,mat in ipairs(groups) do
-        for tc in aux.Next(mat) do
-            if tc:IsCanBeSpecialSummoned(e,0,tp,false,false) then
-                toSummon:AddCard(tc)
-            else
-                -- if original material is banished or in deck/grave/hand, try to find a copy
-                local found=nil
-                for loc in {LOCATION_HAND,LOCATION_DECK,LOCATION_GRAVE,LOCATION_REMOVED} do
-                    local g=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and c:IsCanBeSpecialSummoned(e,0,tp,false,false) end,tp,loc,0,nil)
-                    if #g>0 then
-                        found=g:GetFirst()
-                        break
-                    end
-                end
-                if found then toSummon:AddCard(found) end
-            end
-        end
+    
+    -- Find materials that can be summoned from all zones
+    local summonable=Group.CreateGroup()
+    for tc in aux.Next(mat) do
+        -- Search in Hand
+        local hg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_HAND,0,nil)
+        if hg:GetCount()>0 then summonable:Merge(hg) end
+        
+        -- Search in Deck
+        local dg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_DECK,0,nil)
+        if dg:GetCount()>0 then summonable:Merge(dg) end
+        
+        -- Search in Graveyard
+        local gg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_GRAVE,0,nil)
+        if gg:GetCount()>0 then summonable:Merge(gg) end
+        
+        -- Search in Banished Zone
+        local rg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_REMOVED,0,nil)
+        if rg:GetCount()>0 then summonable:Merge(rg) end
     end
-
-    if #toSummon>ft then
+    
+    if summonable:GetCount()>0 then
+        local ct=math.min(ft,summonable:GetCount())
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-        toSummon=toSummon:Select(tp,ft,ft,nil)
-    end
-
-    if #toSummon>0 then
-        Duel.SpecialSummon(toSummon,0,tp,tp,false,false,POS_FACEUP)
-        -- shuffle deck if any summoned from deck
-        local deckSummoned=toSummon:Filter(Card.IsLocation,nil,LOCATION_DECK)
-        if #deckSummoned>0 then
-            Duel.ShuffleDeck(tp)
+        local sg=summonable:Select(tp,1,ct,nil)
+        
+        if Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)>0 then
+            -- Shuffle deck if we summoned from deck
+            local deck_summoned=sg:Filter(Card.IsLocation,nil,LOCATION_DECK)
+            if deck_summoned:GetCount()>0 then
+                Duel.ShuffleDeck(tp)
+            end
         end
     end
 end
