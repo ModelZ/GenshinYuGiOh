@@ -103,11 +103,15 @@ end
 --e3: GY effect
 function s.negcon(e,tp,eg,ep,ev,re,r,rp)
 	return rp==1-tp and Duel.IsChainNegatable(ev) and re:IsActiveType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP)
-		and re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) -- optional restriction, you can remove
 end
+
+function s.costfilter(c)
+	return c:IsSetCard(0x700) and c:IsType(TYPE_MONSTER) and c:IsDiscardable()
+end
+
 function s.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(aux.DiscardFilter(Card.IsSetCard,0x700),tp,LOCATION_HAND,0,1,nil) end
-	Duel.DiscardHand(tp,aux.DiscardFilter(Card.IsSetCard,0x700),1,1,REASON_COST+REASON_DISCARD,nil)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.costfilter,tp,LOCATION_HAND,0,1,nil) end
+	Duel.DiscardHand(tp,s.costfilter,1,1,REASON_COST+REASON_DISCARD,nil)
 end
 function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
