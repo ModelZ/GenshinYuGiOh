@@ -6,13 +6,12 @@ function s.initial_effect(c)
     c:EnableCounterPermit(0x301) -- Can Place Akara Counter 
 	Fusion.AddProcMix(c,true,true,s.sumerufilter,s.lightfilter)
 
-	-- Opponent cannot respond to your Genshin cards
-	local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_FIELD)
-    e1:SetCode(EFFECT_CANNOT_INACTIVATE) -- prevent inactivation
+    -- Opponent cannot respond to your "Genshin" cards
+    local e1=Effect.CreateEffect(c)
+    e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e1:SetCode(EVENT_CHAINING)
     e1:SetRange(LOCATION_MZONE)
-    e1:SetTargetRange(1,0)
-    e1:SetValue(s.efilter)
+    e1:SetOperation(s.chainop)
     c:RegisterEffect(e1)
 
     local e2=e1:Clone()
@@ -60,11 +59,13 @@ function s.lightfilter(c,fc,sumtype,tp)
 	return c:IsSetCard(0x700) and c:IsAttribute(ATTRIBUTE_LIGHT)  -- "Genshin" LIGHT monster
 end
 
--- Opponent cannot respond to your Genshin cards
-function s.efilter(e,ct)
-    local te=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT)
-    local tc=te:GetHandler()
-    return tc:IsSetCard(0x700) and te:GetHandlerPlayer()==e:GetHandlerPlayer()
+
+function s.chainop(e,tp,eg,ep,ev,re,r,rp)
+    local rc=re:GetHandler()
+    if rc:IsSetCard(0x700) and rp==tp then
+        -- make this chain unrespondable
+        Duel.SetChainLimit(aux.FALSE)
+    end
 end
 -- Place a Akara Counter when other's card place a counter (ignores itself)
 function s.acop(e,tp,eg,ep,ev,re,r,rp)
