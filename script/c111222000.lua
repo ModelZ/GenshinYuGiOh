@@ -22,8 +22,9 @@ function s.initial_effect(c)
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,2))
     e2:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-    e2:SetCode(EVENT_CHAIN_SOLVED)
+    e2:SetCode(EVENT_TO_HAND)
     e2:SetRange(LOCATION_MZONE)
+    e2:SetCondition(s.thcon) -- condition to check if opponent added card
     e2:SetOperation(s.acop) -- add 1 Lullaby counter on resolution
     c:RegisterEffect(e2)
 
@@ -95,6 +96,11 @@ end
 -- Filter for targetable monsters
 function s.tgfilter(c)
     return c:IsMonster() and c:IsAbleToHand()
+end
+
+-- Condition to check if opponent added a card to hand
+function s.thcon(e,tp,eg,ep,ev,re,r,rp)
+    return eg:IsExists(Card.IsControler,1,nil,1-tp)
 end
 
 -- Place a Lullaby Counter when opponent adds a card (draw/search)
