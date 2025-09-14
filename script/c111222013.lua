@@ -1,5 +1,5 @@
 --Lumine Fusion
---Scripted by [Your Name]
+--Scripted by ModelZ
 local s,id=GetID()
 function s.initial_effect(c)
 	--Fusion Summon
