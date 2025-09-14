@@ -128,11 +128,11 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
         if rg:GetCount()>0 then summonable:Merge(rg) end
     end
     Debug.Message("Total summonable materials found: " .. summonable:GetCount())
-    Debug.Message("Object" .. e:GetLabelObject())
-    if summonable:GetCount()>0 then
-        local ct=math.min(ft,summonable:GetCount())
+    Debug.Message("Object" .. mat:GetMaterialCount())
+    if summonable:GetCount()=>mat.GetMaterialCount then
+        local ct=math.min(ft,mat.GetMaterialCount())
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-        local sg=summonable:Select(tp,1,ct,nil)
+        local sg=mat:Select(tp,1,ct,nil)
         
         if Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)>0 then
             -- Shuffle deck if we summoned from deck
