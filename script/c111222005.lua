@@ -14,16 +14,16 @@ function s.initial_effect(c)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
 
-	--Fusion Summon
+	--Fusion Summon 1 "Genshin" monster
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,1))
+	e2:SetDescription(aux.Stringid(id,2))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetCondition(s.fscon)
-	e2:SetTarget(s.fstg)
-	e2:SetOperation(s.fsop)
+	e2:SetCountLimit(1,{id,2})
+	e2:SetCondition(s.fuscon)
+	e2:SetTarget(s.fustg)
+	e2:SetOperation(s.fusop)
 	c:RegisterEffect(e2)
 end
 
@@ -46,27 +46,87 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --(2) Fusion Summon
-function s.fscon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsSetCard,0x700),tp,LOCATION_MZONE,0,2,nil)
+--Condition for Fusion Summon: if you control 2 or more "Genshin" monsters
+function s.fuscon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetMatchingGroupCount(Card.IsSetCard,tp,LOCATION_MZONE,0,nil,0x700)>=2
 end
-function s.fstg(e,tp,eg,ep,ev,re,r,rp,chk)
+--Filter for "Genshin" Fusion Monsters
+function s.fusfilter(c,e,tp,m,f,chkf)
+	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x700) and (not f or f(c))
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) and c:CheckFusionMaterial(m,nil,chkf)
+end
+--Activation requirement for Fusion Summon
+function s.fustg(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
 	if chk==0 then
 		local chkf=tp
 		local mg=Duel.GetFusionMaterial(tp)
-		return Duel.IsExistingMatchingCard(Card.IsFusionSummonable,tp,LOCATION_EXTRA,0,1,nil,mg)
+		local res=Duel.IsExistingMatchingCard(s.fusfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg,nil,chkf)
+		if not res then
+			local ce=Duel.GetChainMaterial(tp)
+			if ce~=nil then
+				local fgroup=ce:GetTarget()
+				local mg3=fgroup(ce,e,tp)
+				local mf=ce:GetValue()
+				res=Duel.IsExistingMatchingCard(s.fusfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg3,mf,chkf)
+			end
+		end
+		return res
 	end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
+	Duel.SetOperationInfo(0,CATEGORY_FUSION_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_MZONE)
 end
-function s.fsop(e,tp,eg,ep,ev,re,r,rp)
+--Operation for Fusion Summon
+function s.fusop(e,tp,eg,ep,ev,re,r,rp)
 	local chkf=tp
-	local mg=Duel.GetFusionMaterial(tp)
-	local sg=Duel.GetMatchingGroup(Card.IsFusionSummonable,tp,LOCATION_EXTRA,0,nil,mg)
-	if #sg>0 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local tg=sg:Select(tp,1,1,nil)
-		local tc=tg:GetFirst()
-		if tc then
-			Duel.FusionSummon(tp,tc,mg)
+	local mg=Duel.GetFusionMaterial(tp):Filter(Card.IsOnField,nil)
+	local sg1=Duel.GetMatchingGroup(Card.IsCanBeFusionMaterial,tp,LOCATION_HAND,0,nil)
+	mg:Merge(sg1)
+	
+	local res=false
+	local ce=Duel.GetChainMaterial(tp)
+	if ce~=nil then
+		local fgroup=ce:GetTarget()
+		local mg3=fgroup(ce,e,tp)
+		local mf=ce:GetValue()
+		if Duel.IsExistingMatchingCard(s.fusfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg3,mf,chkf) then
+			res=true
+		end
+	end
+	if not res and Duel.IsExistingMatchingCard(s.fusfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg,nil,chkf) then
+		res=true
+	end
+	
+	if res then
+		local fcard=nil
+		if ce~=nil then
+			local fgroup=ce:GetTarget()
+			local mg3=fgroup(ce,e,tp)
+			local mf=ce:GetValue()
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+			fcard=Duel.SelectMatchingCard(tp,s.fusfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,mg3,mf,chkf):GetFirst()
+		else
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+			fcard=Duel.SelectMatchingCard(tp,s.fusfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,mg,nil,chkf):GetFirst()
+		end
+		
+		if fcard then
+			if ce~=nil then
+				local fgroup=ce:GetTarget()
+				local mg3=fgroup(ce,e,tp)
+				local mf=ce:GetValue()
+				local mat=Duel.SelectFusionMaterial(tp,fcard,mg3,nil,chkf)
+				fcard:SetMaterial(mat)
+				Duel.SendtoGrave(mat,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
+				Duel.BreakEffect()
+				Duel.SpecialSummon(fcard,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
+			else
+				local mat=Duel.SelectFusionMaterial(tp,fcard,mg,nil,chkf)
+				fcard:SetMaterial(mat)
+				Duel.SendtoGrave(mat,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
+				Duel.BreakEffect()
+				Duel.SpecialSummon(fcard,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
+			end
+			fcard:CompleteProcedure()
 		end
 	end
 end
