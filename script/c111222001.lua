@@ -1,6 +1,6 @@
 --Kokomi
 local s,id=GetID()
-s.listed_series={0x3700}
+s.listed_series={0x700}
 function s.initial_effect(c)
     --Search a "Genshin" Monster card
     local e1=Effect.CreateEffect(c)
