@@ -74,7 +74,10 @@ end
 
 -- Trigger only if another "Genshin" monster (not this card) activates its effect
 function s.descon(e,tp,eg,ep,ev,re,r,rp)
-    Debug.Message("condition passed")
+	-- only face-up and on the field
+	local c = e:GetHandler()
+    if not c:IsFaceup() or not c:IsLocation(LOCATION_MZONE) then return false end
+	
     local rc = re:GetHandler()
     return rc and rc:IsSetCard(0x700)      -- Must be a "Genshin" monster
        and rc:IsType(TYPE_MONSTER)         -- Must be a monster
