@@ -63,7 +63,7 @@ function s.chainop(e,tp,eg,ep,ev,re,r,rp)
         -- make this chain unrespondable
         Duel.SetChainLimit(aux.FALSE)
         Debug.Message("Opponent cannot respond to your Genshin card effects!")
-        rc:AddCounter(0x301,1)
+        e:GetHandler():AddCounter(0x301,1)
     end
 end
 
