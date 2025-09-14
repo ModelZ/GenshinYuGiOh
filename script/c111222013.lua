@@ -21,9 +21,9 @@ function s.filter1(c,e)
 	return c:IsSetCard(0x700) and c:IsOnField() and c:IsAbleToRemove() and not c:IsImmuneToEffect(e)
 end
 
---Filter for opponent's monsters on field (will be treated as "Genshin")
+--Filter for opponent's face-up monsters on field (will be treated as "Genshin")
 function s.filter2(c,e)
-	return c:IsOnField() and c:IsAbleToRemove() and not c:IsImmuneToEffect(e)
+    return c:IsFaceup() and c:IsOnField() and c:IsAbleToRemove() and not c:IsImmuneToEffect(e)
 end
 
 --Filter for "Genshin" Fusion monsters in Extra Deck
