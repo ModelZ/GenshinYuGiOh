@@ -34,11 +34,24 @@ function s.initial_effect(c)
 end
 
 -- ========= Negate opponent effect =========
+
+-- Negate opponent's monster effect in response to "Genshin" card effect condition
 function s.negcon(e,tp,eg,ep,ev,re,r,rp)
-    -- Must be opponent's monster effect responding to a "Genshin" card effect
-    return rp~=tp and re:IsActiveType(TYPE_MONSTER) and Duel.IsChainNegatable(ev)
-        and re:GetHandler():IsRelateToEffect(re)
+    -- Only opponent's monster effect
+    if rp==tp or not re:IsActiveType(TYPE_MONSTER) then return false end
+    -- Effect must be negatable
+    if not Duel.IsChainNegatable(ev) then return false end
+
+    -- Check if this effect is responding to a "Genshin" card effect
+    local prev = Duel.GetChainInfo(ev-1,CHAININFO_TRIGGERING_EFFECT)
+    if not prev then return false end
+    local rc = prev:GetHandler()
+    if not rc:IsSetCard(0x700) then return false end -- 0x700 = "Genshin" archetype
+
+    -- Make sure the opponent's monster is still related to its effect
+    return re:GetHandler():IsRelateToEffect(re)
 end
+
 function s.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return e:GetHandler():IsDiscardable() end
     Duel.SendtoGrave(e:GetHandler(),REASON_COST+REASON_DISCARD)
