@@ -19,10 +19,10 @@ s.listed_series={0x700} -- "Genshin" archetype code
 
 -- Check if a "Genshin" Fusion monster left the field by opponent's card effect
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-    print("Checking condition...")
+    Debug.Message("Checking condition...")
     local tc=eg:GetFirst()
     while tc do
-        print("Inspecting card: " .. tc:GetCode())
+        Debug.Message("Inspecting card: " .. tc:GetCode())
         -- Must be your "Genshin" Fusion monster
         if tc:IsControler(tp) 
             and tc:IsSetCard(0x700) 
@@ -31,7 +31,7 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
             -- Must be removed by opponent's card effect
             and (r&REASON_EFFECT)~=0
             and rp==1-tp then
-            print("Condition met for card: " .. tc:GetCode())
+            Debug.Message("Condition met for card: " .. tc:GetCode())
             -- Store the materials for later use
             local mat=tc:GetMaterial()
             if mat and mat:GetCount()>0 then
@@ -41,7 +41,7 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
         end
         tc=eg:GetNext()
     end
-    print("Condition not met.")
+    Debug.Message("Condition not met.")
     return false
 end
 
@@ -100,7 +100,7 @@ end
 
 -- Operation: Special Summon the fusion materials
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-    print("Activating 'My Brother's' effect...")
+    Debug.Message("Activating 'My Brother's' effect...")
     local mat=e:GetLabelObject()
     if not mat then return end
     
@@ -110,7 +110,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
     -- Find materials that can be summoned from all zones
     local summonable=Group.CreateGroup()
     for tc in aux.Next(mat) do
-        print("Checking material: " .. tc:GetCode())
+        Debug.Message("Checking material: " .. tc:GetCode())
         -- Search in Hand
         local hg=Duel.GetMatchingGroup(function(c) return c:GetCode()==tc:GetCode() and s.spfilter(c,e,tp) end,tp,LOCATION_HAND,0,nil)
         if hg:GetCount()>0 then summonable:Merge(hg) end
