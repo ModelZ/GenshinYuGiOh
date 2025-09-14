@@ -25,7 +25,7 @@ function s.initial_effect(c)
     e2:SetCode(EVENT_TO_HAND)
     e2:SetRange(LOCATION_MZONE)
     e2:SetCondition(s.thcon) -- condition to check if opponent added card
-    e2:SetOperation(s.acop) -- add 1 Lullaby counter on resolution
+    e2:SetOperation(s.thop) -- add 1 Lullaby counter on resolution
     c:RegisterEffect(e2)
 
 	-- Negate any summon using Lullaby Counter
@@ -104,12 +104,8 @@ function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 -- Place a Lullaby Counter when opponent adds a card (draw/search)
-function s.acop(e,tp,eg,ep,ev,re,r,rp)
-    -- Check if the effect is from the opponent
-    if (re:IsHasCategory(CATEGORY_DRAW) or re:IsHasCategory(CATEGORY_SEARCH)) and re:GetOwnerPlayer()~=tp then
-        -- Add 1 Lullaby Counter when the opponent draws/searches
-        e:GetHandler():AddCounter(0x300,1)
-    end
+function s.thop(e,tp,eg,ep,ev,re,r,rp)
+    e:GetHandler():AddCounter(0x300,1)
 end
 
 
