@@ -23,12 +23,13 @@ function s.initial_effect(c)
     e3:SetOperation(s.acop)
     c:RegisterEffect(e3)
 
-	-- If a card would be destroyed by battle (Quick Effect): You can remove 1 Akara Counter instead and take no damage.
+	-- When your "Genshin" card would be destroyed by battle or a card effect (Quick Effect): 
+    -- You can remove 1 Akara Counter; that "Genshin" monster cannot destroy by battle or card effect and take no damage.
     local e4=Effect.CreateEffect(c)
-    e4:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_SINGLE)
+    e4:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
+    e4:SetCode(EVENT_BATTLE_DESTROYING)
     e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
-    e4:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
-    e4:SetCondition(s.damcon)
+    e4:SetRange(LOCATION_MZONE)
     e4:SetTarget(s.damtg)
     e4:SetOperation(s.damrepop)
     c:RegisterEffect(e4)
@@ -67,33 +68,34 @@ function s.acop(e,tp,eg,ep,ev,re,r,rp)
     c:AddCounter(0x301,1)
 end
 
--- Condition: check if we can replace destruction
-function s.damcon(e,tp,eg,ep,ev,re,r,rp)
-    Debug.Message("Checking destruction replacement condition")
-    return e:GetHandler():IsCanRemoveCounter(tp,1,0,0x301,1,REASON_COST)
-end
-
--- Target: actually do the replacement
+-- Destruction replacement target
 function s.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return true end
-    Duel.SetOperationInfo(0,CATEGORY_COUNTER,nil,1,0,0x301)
+    local c=e:GetHandler()
+    if chk==0 then return c:GetCounter(0x301)>0 end
+    return true
 end
 
--- Operation: actually do the replacement
+-- Destruction replacement operation
 function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
-    -- remove 1 Akara Counter from this card
-    e:GetHandler():RemoveCounter(tp,0x301,1,REASON_COST)
-    -- prevent target monsters destruction this battle
-    local e1=Effect.CreateEffect(e:GetHandler())
-    e1:SetType(EFFECT_TYPE_FIELD)
-    e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
-    e1:SetTargetRange(LOCATION_MZONE,0)
-    e1:SetReset(RESET_PHASE+PHASE_DAMAGE)
-    e1:SetValue(1)
-    Duel.RegisterEffect(e1,tp)
-
-    -- take no battle damage this battle
-    Duel.ChangeBattleDamage(tp,0)
+    local c=e:GetHandler()
+    if c:GetCounter(0x301)>0 then
+        c:RemoveCounter(tp,0x301,1,REASON_COST)
+        local tc=Duel.GetAttacker() or Duel.GetAttackTarget()
+        if tc and tc:IsSetCard(0x700) then
+            -- Make the target indestructible by battle and card effect this time
+            local e1=Effect.CreateEffect(c)
+            e1:SetType(EFFECT_TYPE_SINGLE)
+            e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
+            e1:SetValue(1)
+            e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
+            tc:RegisterEffect(e1)
+            local e2=e1:Clone()
+            e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+            tc:RegisterEffect(e2)
+            -- Prevent battle damage
+            Duel.ChangeBattleDamage(tp,0)
+        end
+    end
 end
 
 
