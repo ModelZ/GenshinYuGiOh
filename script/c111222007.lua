@@ -153,10 +153,10 @@ function s.protcon(e,tp,eg,ep,ev,re,r,rp)
 
     -- Check previous chain link
     local ex,tg,tc=Duel.GetOperationInfo(ev,CATEGORY_DESTROY)
-    -- Check if there is at least 1 face-up "Genshin" card you control that would be destroyed by the previous effect
-
+    
     Debug.Message("protcon: ex="..tostring(ex).." tg="..tostring(tg).." tc="..tostring(tc))
 
+    -- Check if there is at least 1 face-up "Genshin" card you control that would be destroyed by the previous effect
     return ex and tg~=nil and tc+tg:FilterCount(Card.IsOnField,nil)-#tg>0 and
         -- Check if there is at least 1 face-up "Genshin" card you control
         tg:IsExists(function(c) return c:IsFaceup() and c:IsSetCard(0x700) and c:IsControler(tp) end, 1, nil)
@@ -166,22 +166,35 @@ end
 
 -- Operation: remove 1 Akara Counter and prevent destruction + damage
 function s.protop(e,tp,eg,ep,ev,re,r,rp)
+    -- Check if effect has destruction targets
+    local ex,tg,tc=Duel.GetOperationInfo(ev,CATEGORY_DESTROY)
+    if not tg then return end
+
     local c=e:GetHandler()
     if c:GetCounter(0x301)<=0 then return end
+
     -- Remove 1 Akara Counter
     c:RemoveCounter(tp,0x301,1,REASON_EFFECT)
-    -- Apply indestructible effect for this destruction
-    local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_SINGLE)
-    e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-    e1:SetValue(1)
-    e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_CHAIN)
-    c:RegisterEffect(e1)
-    -- Prevent damage from this effect (if applicable)
-    local e2=Effect.CreateEffect(c)
-    e2:SetType(EFFECT_TYPE_SINGLE)
-    e2:SetCode(EFFECT_NO_EFFECT_DAMAGE)
-    e2:SetValue(1)
-    e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_CHAIN)
-    c:RegisterEffect(e2, tp)
+
+    -- Give indestructible + no effect damage to each targeted monster
+    for tc in aux.Next(tg) do
+        if tc:IsRelateToEffect(re) then
+            -- Indestructible against this effect
+            local e1=Effect.CreateEffect(c)
+            e1:SetType(EFFECT_TYPE_SINGLE)
+            e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+            e1:SetValue(1)
+            e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_CHAIN)
+            tc:RegisterEffect(e1)
+
+            -- Prevent damage from this effect (if applicable)
+            local e2=Effect.CreateEffect(c)
+            e2:SetType(EFFECT_TYPE_SINGLE)
+            e2:SetCode(EFFECT_NO_EFFECT_DAMAGE)
+            e2:SetValue(1)
+            e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_CHAIN)
+            tc:RegisterEffect(e2)
+        end
+    end
 end
+
