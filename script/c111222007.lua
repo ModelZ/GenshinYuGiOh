@@ -146,7 +146,7 @@ function s.protcon(e,tp,eg,ep,ev,re,r,rp)
 
     -- Check if there is at least 1 face-up "Genshin" card you control
     local g=Duel.GetMatchingGroup(function(c) return c:IsFaceup() and c:IsSetCard(0x700) and c:IsControler(tp) and not c:IsReason(REASON_DESTROY)
-         not c:IsOnField() or not c:IsFaceup() end, tp, LOCATION_MZONE, 0, nil)
+         and not c:IsOnField() or not c:IsFaceup() end, tp, LOCATION_MZONE, 0, nil)
 
     if g:GetCount()==0 then 
         return false 
