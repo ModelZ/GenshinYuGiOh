@@ -24,14 +24,13 @@ function s.initial_effect(c)
     c:RegisterEffect(e3)
 
 	-- Quick effect: prevent destruction or damage
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_QUICK_O)
-	e4:SetCode(EVENT_PRE_BATTLE_DAMAGE)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetCondition(s.damcon)
-	e4:SetCost(s.damcost)
-	e4:SetOperation(s.damop)
-	c:RegisterEffect(e4)
+    local e4=Effect.CreateEffect(c)
+    e4:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+    e4:SetCode(EFFECT_DESTROY_REPLACE)
+    e4:SetRange(LOCATION_MZONE)
+    e4:SetTarget(s.damcon)
+    e4:SetValue(s.damop)
+    c:RegisterEffect(e4)
 
     -- You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); 
     -- increase the number of that Counter by the number of removed Akara counter(s)..
@@ -58,19 +57,28 @@ end
 -- Place an Akara Counter when another card leaves the field (ignores itself)
 function s.acop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    if eg:IsContains(c) then return end
-    -- Another card (not itself) left the field → give this card 1 Akara Counter
+    -- Another card left the field → give this card 1 Akara Counter
     c:AddCounter(0x301,1)
 end
 
+-- Destruction replacement condition
 function s.damcon(e,tp,eg,ep,ev,re,r,rp)
-	return true -- you can add battle/effect destruction check
+    return Duel.IsCanRemoveCounter(tp,1,0,0x301,1,REASON_COST)
 end
-function s.damcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:GetCounter(0x301)>0 end
-	c:RemoveCounter(tp,0x301,1,REASON_COST)
-end
+
+-- Destruction replacement operation
 function s.damop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.ChangeBattleDamage(tp,0)
+
+    -- Remove 1 Akara Counter as the replacement cost
+    Duel.RemoveCounter(tp,1,0,0x301,1,REASON_COST)
+
+    -- took no battle damage
+    if Duel.RemoveCounter(tp,1,0,0x301,1,REASON_COST) then
+        -- Prevent the destruction
+        return true
+    else
+        return false
+    end
+
 end
+
