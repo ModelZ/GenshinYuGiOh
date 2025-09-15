@@ -23,14 +23,20 @@ function s.initial_effect(c)
     e3:SetOperation(s.acop)
     c:RegisterEffect(e3)
 
-	-- If a card would be destroyed by battle or card effect (Quick Effect): You can remove 1 Akara Counter instead and take no damage.
+	-- If a card would be destroyed by battle (Quick Effect): You can remove 1 Akara Counter instead and take no damage.
     local e4=Effect.CreateEffect(c)
     e4:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
-    e4:SetCode(EVENT_DESTROY)
+    e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
+    e4:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
     e4:SetCondition(s.damcon)
     e4:SetTarget(s.damtg)
     e4:SetOperation(s.damrepop)
     c:RegisterEffect(e4)
+
+    -- If a card would be destroyed by card effect (Quick Effect): You can remove 1 Akara Counter instead and take no damage.
+    -- local e5=Effect.CreateEffect(c)
+    -- e5:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
+
 
     -- You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); 
     -- increase the number of that Counter by the number of removed Akara counter(s)..
@@ -74,8 +80,19 @@ end
 
 -- Operation: actually do the replacement
 function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
+    -- remove 1 Akara Counter from this card
     e:GetHandler():RemoveCounter(tp,0x300,1,REASON_COST)
-    Duel.ChangeBattleDamage(tp,0) -- if in battle, no damage
+    -- prevent target monsters destruction this battle
+    local e1=Effect.CreateEffect(e:GetHandler())
+    e1:SetType(EFFECT_TYPE_FIELD)
+    e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
+    e1:SetTargetRange(LOCATION_MZONE,0)
+    e1:SetReset(RESET_PHASE+PHASE_DAMAGE)
+    e1:SetValue(1)
+    Duel.RegisterEffect(e1,tp)
+
+    -- take no battle damage this battle
+    Duel.ChangeBattleDamage(tp,0)
 end
 
 
