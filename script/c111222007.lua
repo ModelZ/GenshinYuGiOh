@@ -127,6 +127,32 @@ function s.protcon(e,tp,eg,ep,ev,re,r,rp)
     return c:GetCounter(0x301)>0
 end
 
+function s.protcon(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    Debug.Message("protcon called")
+
+    -- Only opponent's card effect
+    if rp==tp or not re:IsActiveType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP) then 
+        return false 
+    end
+    Debug.Message("protcon: opponent's effect")
+
+    -- Only consider effects that have CATEGORY_DESTROY
+    if not re:IsHasCategory(CATEGORY_DESTROY) then 
+        return false 
+    end
+    Debug.Message("protcon: effect has CATEGORY_DESTROY")
+
+    -- Check that this card is affected and has at least 1 Akara counter
+    if not eg:IsContains(c) or c:GetCounter(0x301)<=0 then
+        return false
+    end
+
+    Debug.Message("protcon: condition passed")
+    return true
+end
+
+
 -- Operation: remove 1 Akara Counter and prevent destruction + damage
 function s.protop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
