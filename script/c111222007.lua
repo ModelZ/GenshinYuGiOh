@@ -106,26 +106,26 @@ function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 
-function s.protcon(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-    Debug.Message("protcon called")
+-- function s.protcon(e,tp,eg,ep,ev,re,r,rp)
+--     local c=e:GetHandler()
+--     Debug.Message("protcon called")
 
-    -- Only opponent's card effect
-    if rp==tp or not re:IsActiveType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP) then return false end
-    Debug.Message("protcon: opponent's effect")
+--     -- Only opponent's card effect
+--     if rp==tp or not re:IsActiveType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP) then return false end
+--     Debug.Message("protcon: opponent's effect")
 
-    -- Check previous chain link
-    local prev = Duel.GetChainInfo(ev-1, CHAININFO_TRIGGERING_EFFECT)
-    if not prev then return false end
-    Debug.Message("protcon: previous chain link exists")
-    local rc = prev:GetHandler()
+--     -- Check previous chain link
+--     local prev = Duel.GetChainInfo(ev-1, CHAININFO_TRIGGERING_EFFECT)
+--     if not prev then return false end
+--     Debug.Message("protcon: previous chain link exists")
+--     local rc = prev:GetHandler()
 
-    -- Check that the effect has CATEGORY_DESTROY
-    if not rc:IsHasCategory(CATEGORY_DESTROY) then return false end
-    Debug.Message("protcon: effect has CATEGORY_DESTROY")
-    -- Check that the card has at least 1 Akara counter
-    return c:GetCounter(0x301)>0
-end
+--     -- Check that the effect has CATEGORY_DESTROY
+--     if not rc:IsHasCategory(CATEGORY_DESTROY) then return false end
+--     Debug.Message("protcon: effect has CATEGORY_DESTROY")
+--     -- Check that the card has at least 1 Akara counter
+--     return c:GetCounter(0x301)>0
+-- end
 
 function s.protcon(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
