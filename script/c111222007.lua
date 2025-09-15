@@ -137,20 +137,26 @@ function s.protcon(e,tp,eg,ep,ev,re,r,rp)
     end
     Debug.Message("protcon: opponent's effect")
 
-    -- Only consider effects that have CATEGORY_DESTROY
+    -- Only effects that have CATEGORY_DESTROY
     if not re:IsHasCategory(CATEGORY_DESTROY) then 
         return false 
     end
     Debug.Message("protcon: effect has CATEGORY_DESTROY")
 
-    -- Check that this card is affected and has at least 1 Akara counter
-    if not eg:IsContains(c) or c:GetCounter(0x301)<=0 then
+    -- Check if this card is affected by the effect
+    if not c:IsRelateToEffect(re) then
+        return false
+    end
+
+    -- Check that it has at least 1 Akara counter
+    if c:GetCounter(0x301)<=0 then
         return false
     end
 
     Debug.Message("protcon: condition passed")
     return true
 end
+
 
 
 -- Operation: remove 1 Akara Counter and prevent destruction + damage
