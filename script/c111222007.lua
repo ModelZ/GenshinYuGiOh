@@ -80,7 +80,7 @@ function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if c:GetCounter(0x301)>0 then
         c:RemoveCounter(tp,0x301,1,REASON_COST)
-        local tc=Duel.GetAttacker() or Duel.GetAttackTarget()
+        local tc=Duel.GetAttackTarget()
         if tc and tc:IsSetCard(0x700) then
             -- Make the target indestructible by battle and card effect this time
             local e1=Effect.CreateEffect(c)
@@ -89,9 +89,9 @@ function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
             e1:SetValue(1)
             e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
             tc:RegisterEffect(e1)
-            local e2=e1:Clone()
-            e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-            tc:RegisterEffect(e2)
+            -- local e2=e1:Clone()
+            -- e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+            -- tc:RegisterEffect(e2)
             -- Prevent battle damage
             Duel.ChangeBattleDamage(tp,0)
         end
