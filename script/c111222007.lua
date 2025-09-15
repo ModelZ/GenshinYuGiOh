@@ -23,13 +23,12 @@ function s.initial_effect(c)
     e3:SetOperation(s.acop)
     c:RegisterEffect(e3)
 
-	-- Quick effect: prevent destruction or damage
+	-- Register destruction replacement
     local e4=Effect.CreateEffect(c)
-    e4:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+    e4:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_SINGLE)
     e4:SetCode(EFFECT_DESTROY_REPLACE)
-    e4:SetRange(LOCATION_MZONE)
-    e4:SetTarget(s.damcon)
-    e4:SetValue(s.damop)
+    e4:SetTarget(s.damrep)
+    e4:SetOperation(s.damrepop)
     c:RegisterEffect(e4)
 
     -- You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); 
@@ -61,24 +60,18 @@ function s.acop(e,tp,eg,ep,ev,re,r,rp)
     c:AddCounter(0x301,1)
 end
 
--- Destruction replacement condition
-function s.damcon(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.IsCanRemoveCounter(tp,1,0,0x301,1,REASON_COST)
+-- Target: check if we can replace destruction
+function s.damrep(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    return c:IsReason(REASON_BATTLE+REASON_EFFECT) 
+        and c:IsOnField() and c:IsFaceup()
+        and Duel.IsCanRemoveCounter(tp,1,0,0x301,1,REASON_COST)
 end
 
--- Destruction replacement operation
-function s.damop(e,tp,eg,ep,ev,re,r,rp)
-
-    -- Remove 1 Akara Counter as the replacement cost
-    Duel.RemoveCounter(tp,1,0,0x301,1,REASON_COST)
-
-    -- took no battle damage
-    if Duel.RemoveCounter(tp,1,0,0x301,1,REASON_COST) then
-        -- Prevent the destruction
-        return true
-    else
-        return false
-    end
-
+-- Operation: actually do the replacement
+function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
+    e:GetHandler():RemoveCounter(tp,1,0,0x301,1,REASON_COST)
+    Duel.ChangeBattleDamage(tp,0) -- if in battle, no damage
 end
+
 
