@@ -26,7 +26,7 @@ function s.initial_effect(c)
 	-- When your "Genshin" card would be destroyed by battle or a card effect (Quick Effect): 
     -- You can remove 1 Akara Counter; that "Genshin" monster cannot destroy by battle or card effect and take no damage.
     local e4=Effect.CreateEffect(c)
-    e4:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
+    e4:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_FIELD)
     e4:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
     e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
     e4:SetRange(LOCATION_MZONE)
@@ -71,13 +71,11 @@ end
 -- target gain indestruction condition
 function s.damcon(e,tp,eg,ep,ev,re,r,rp,chk)
     local tc=Duel.GetAttackTarget()
-    Debug.Message(e:GetHandler():GetCounter(0x301)>0 and
-        tc:IsSetCard(0x700) and tc:IsControler(tp))
     return e:GetHandler():GetCounter(0x301)>0 and
         tc:IsSetCard(0x700) and tc:IsControler(tp)
 end
 
--- Destruction replacement operation
+-- target gain indestruction operation
 function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if c:GetCounter(0x301)>0 then
