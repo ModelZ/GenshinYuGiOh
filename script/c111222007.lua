@@ -37,7 +37,7 @@ function s.initial_effect(c)
     -- When a card would be destroyed by card effect (Quick Effect): You can remove 1 Akara Counter; that "Genshin" monster cannot destroy card effect and take no damage.
     local e5=Effect.CreateEffect(c)
     e5:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
-    e5:SetCode(EVENT_DESTROY)
+    e5:SetCode(EVENT_CHAINING)
     e5:SetRange(LOCATION_ONFIELD)
     e5:SetCondition(s.protcon)
     e5:SetOperation(s.protop)
