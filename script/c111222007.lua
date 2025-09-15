@@ -58,7 +58,8 @@ end
 -- Place an Akara Counter when another card leaves the field (ignores itself)
 function s.acop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    -- Another card left the field → give this card 1 Akara Counter
+    if eg:IsContains(c) then return end
+    -- Another card (not itself) left the field → give this card 1 Akara Counter
     c:AddCounter(0x301,1)
 end
 
