@@ -71,7 +71,7 @@ end
 -- Destruction replacement target
 function s.damcon(e,tp,eg,ep,ev,re,r,rp,chk)
     local tc=Duel.GetAttackTarget()
-    return e:GetHandler():GetCounter(0x301)>0
+    return e:GetHandler():GetCounter(0x301)>0 and
         tc:IsSetCard(0x700) and tc:IsControler(tp) and tc==e:GetHandler()
 end
 
