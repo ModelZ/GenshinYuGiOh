@@ -68,9 +68,11 @@ function s.acop(e,tp,eg,ep,ev,re,r,rp)
     c:AddCounter(0x301,1)
 end
 
--- Destruction replacement target
+-- target gain indestruction condition
 function s.damcon(e,tp,eg,ep,ev,re,r,rp,chk)
     local tc=Duel.GetAttackTarget()
+    Debug.Message(e:GetHandler():GetCounter(0x301)>0 and
+        tc:IsSetCard(0x700) and tc:IsControler(tp) and tc==e:GetHandler())
     return e:GetHandler():GetCounter(0x301)>0 and
         tc:IsSetCard(0x700) and tc:IsControler(tp) and tc==e:GetHandler()
 end
