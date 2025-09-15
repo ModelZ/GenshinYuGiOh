@@ -41,6 +41,7 @@ function s.initial_effect(c)
     e5:SetRange(LOCATION_FIELD)
     e5:SetCondition(s.protcon)
     e5:SetOperation(s.protop)
+    c:RegisterEffect(e5)
 
     -- If a card would be destroyed by card effect (Quick Effect): You can remove 1 Akara Counter instead and take no damage.
     -- local e5=Effect.CreateEffect(c)
