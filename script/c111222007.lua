@@ -34,6 +34,14 @@ function s.initial_effect(c)
     e4:SetOperation(s.damrepop)
     c:RegisterEffect(e4)
 
+    -- When a card would be destroyed by card effect (Quick Effect): You can remove 1 Akara Counter; that "Genshin" monster cannot destroy card effect and take no damage.
+    local e5=Effect.CreateEffect(c)
+    e5:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
+    e5:SetCode(EVENT_DESTROY)
+    e5:SetRange(LOCATION_FIELD)
+    e5:SetCondition(s.protcon)
+    e5:SetOperation(s.protop)
+
     -- If a card would be destroyed by card effect (Quick Effect): You can remove 1 Akara Counter instead and take no damage.
     -- local e5=Effect.CreateEffect(c)
     -- e5:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
@@ -97,4 +105,34 @@ function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 
+function s.protcon(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    -- Make sure your card is being affected
+    if not eg:IsContains(c) then return false end
+    -- Check that the effect has CATEGORY_DESTROY
+    if not re:IsHasCategory(CATEGORY_DESTROY) then return false end
+    -- Check that the card has at least 1 Akara counter
+    return c:GetCounter(0x301)>0
+end
 
+-- Operation: remove 1 Akara Counter and prevent destruction + damage
+function s.protop(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    if c:GetCounter(0x301)<=0 then return end
+    -- Remove 1 Akara Counter
+    c:RemoveCounter(tp,0x301,1,REASON_EFFECT)
+    -- Apply indestructible effect for this destruction
+    local e1=Effect.CreateEffect(c)
+    e1:SetType(EFFECT_TYPE_SINGLE)
+    e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+    e1:SetValue(1)
+    e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_CHAIN)
+    c:RegisterEffect(e1)
+    -- Prevent damage from this effect (if applicable)
+    local e2=Effect.CreateEffect(c)
+    e2:SetType(EFFECT_TYPE_SINGLE)
+    e2:SetCode(EFFECT_NO_EFFECT_DAMAGE)
+    e2:SetValue(1)
+    e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_CHAIN)
+    c:RegisterEffect(e2, tp)
+end
