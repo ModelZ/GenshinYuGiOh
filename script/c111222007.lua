@@ -144,23 +144,22 @@ function s.protcon(e,tp,eg,ep,ev,re,r,rp)
     end
     Debug.Message("protcon: effect has CATEGORY_DESTROY")
 
-    -- Check if there is at least 1 face-up "Genshin" card you control
-    local g=Duel.GetMatchingGroup(function(c) return c:IsFaceup() and c:IsSetCard(0x700) and c:IsControler(tp) and not c:IsReason(REASON_DESTROY)
-         and not c:IsOnField() or not c:IsFaceup() end, tp, LOCATION_MZONE, 0, nil)
-
-    if g:GetCount()==0 then 
-        return false 
-    end
-
-    Debug.Message("protcon: you control at least 1 face-up Genshin card and would be destroyed by previous effect")
-
     -- Check that it has at least 1 Akara counter
     if c:GetCounter(0x301)<=0 then
         return false
     end
 
-    Debug.Message("protcon: condition passed")
-    return true
+    Debug.Message("protcon: has at least 1 Akara counter")
+
+    -- Check previous chain link
+    local ex,tg,tc=Duel.GetOperationInfo(ev,CATEGORY_DESTROY)
+    -- Check if there is at least 1 face-up "Genshin" card you control that would be destroyed by the previous effect
+
+    Debug.Message("protcon: ex="..tostring(ex).." tg="..tostring(tg).." tc="..tostring(tc))
+
+    return ex and tg~=nil and tc+tg:FilterCount(Card.IsOnField,nil)-#tg>0 and
+        -- Check if there is at least 1 face-up "Genshin" card you control
+        tg:IsExists(function(c) return c:IsFaceup() and c:IsSetCard(0x700) and c:IsControler(tp) end, 1, nil)
 end
 
 
