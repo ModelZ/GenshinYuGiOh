@@ -108,10 +108,13 @@ end
 
 function s.protcon(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
+    Debug.Message("protcon called")
     -- Make sure your card is being affected
     if not eg:IsContains(c) then return false end
+    Debug.Message("protcon: card is in affected group")
     -- Check that the effect has CATEGORY_DESTROY
     if not re:IsHasCategory(CATEGORY_DESTROY) then return false end
+    Debug.Message("protcon: effect has CATEGORY_DESTROY")
     -- Check that the card has at least 1 Akara counter
     return c:GetCounter(0x301)>0
 end
