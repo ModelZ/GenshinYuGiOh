@@ -82,7 +82,7 @@ end
 -- Operation: actually do the replacement
 function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
     -- remove 1 Akara Counter from this card
-    e:GetHandler():RemoveCounter(tp,0x300,1,REASON_COST)
+    e:GetHandler():RemoveCounter(tp,0x301,1,REASON_COST)
     -- prevent target monsters destruction this battle
     local e1=Effect.CreateEffect(e:GetHandler())
     e1:SetType(EFFECT_TYPE_FIELD)
