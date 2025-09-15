@@ -25,9 +25,10 @@ function s.initial_effect(c)
 
 	-- If a card would be destroyed by battle or card effect (Quick Effect): You can remove 1 Akara Counter instead and take no damage.
     local e4=Effect.CreateEffect(c)
-    e4:SetType(EFFECT_TYPE_QUICK_O)
+    e4:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
     e4:SetCode(EVENT_DESTROY)
     e4:SetCondition(s.damcon)
+    e4:SetTarget(s.damtg)
     e4:SetOperation(s.damrepop)
     c:RegisterEffect(e4)
 
@@ -60,9 +61,15 @@ function s.acop(e,tp,eg,ep,ev,re,r,rp)
     c:AddCounter(0x301,1)
 end
 
--- Target: check if we can replace destruction
+-- Condition: check if we can replace destruction
 function s.damcon(e,tp,eg,ep,ev,re,r,rp)
-    return e:GetHandler():IsCanRemoveCounter(tp,1,0,0x301,1,REASON_COST)
+    return c:GetHandler():IsCanRemoveCounter(tp,1,0,0x301,1,REASON_COST)
+end
+
+-- Target: actually do the replacement
+function s.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return true end
+    Duel.SetOperationInfo(0,CATEGORY_COUNTER,nil,1,0,0x301)
 end
 
 -- Operation: actually do the replacement
