@@ -81,7 +81,7 @@ function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
     if c:GetCounter(0x301)>0 then
         c:RemoveCounter(tp,0x301,1,REASON_COST)
         local tc=Duel.GetAttackTarget()
-        if tc and tc:IsSetCard(0x700) then
+        if tc and tc:IsSetCard(0x700) tc:IsControler(tp) and tc==e:GetHandler() then
             -- Make the target indestructible by battle and card effect this time
             local e1=Effect.CreateEffect(c)
             e1:SetType(EFFECT_TYPE_SINGLE)
