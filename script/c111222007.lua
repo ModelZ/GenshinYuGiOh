@@ -23,15 +23,19 @@ function s.initial_effect(c)
     e3:SetOperation(s.acop)
     c:RegisterEffect(e3)
 
-	-- Destruction replacement: remove 1 Akara Counter instead
-    local e5=Effect.CreateEffect(c)
-    e5:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-    e5:SetCode(EFFECT_DESTROY_REPLACE)
-    e5:SetRange(LOCATION_MZONE)
-    e5:SetTarget(s.reptg)
-    e5:SetValue(s.repval)
-    e5:SetOperation(s.repop)
-    c:RegisterEffect(e5)
+	-- If a card would be destroyed by battle (Quick Effect): You can remove 1 Akara Counter instead and take no damage.
+    local e4=Effect.CreateEffect(c)
+    e4:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
+    e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
+    e4:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
+    e4:SetCondition(s.damcon)
+    e4:SetTarget(s.damtg)
+    e4:SetOperation(s.damrepop)
+    c:RegisterEffect(e4)
+
+    -- If a card would be destroyed by card effect (Quick Effect): You can remove 1 Akara Counter instead and take no damage.
+    -- local e5=Effect.CreateEffect(c)
+    -- e5:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
 
 
     -- You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); 
@@ -63,26 +67,33 @@ function s.acop(e,tp,eg,ep,ev,re,r,rp)
     c:AddCounter(0x301,1)
 end
 
--- Target: check if we can replace destruction
-function s.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then
-        return eg:IsExists(function(tc) 
-            return tc:IsControler(tp) and tc:IsOnField() and tc:IsReason(REASON_EFFECT)
-        end,1,nil) 
-        and Duel.IsCanRemoveCounter(tp,1,0,0x301,1,REASON_COST)
-    end
-    return true
+-- Condition: check if we can replace destruction
+function s.damcon(e,tp,eg,ep,ev,re,r,rp)
+    Debug.Message("Checking destruction replacement condition")
+    return e:GetHandler():IsCanRemoveCounter(tp,1,0,0x301,1,REASON_COST)
 end
 
--- Value: say “yes, we replace this destruction”
-function s.repval(e,c)
-    return c:IsControler(e:GetHandlerPlayer()) and c:IsOnField() and c:IsReason(REASON_EFFECT)
+-- Target: actually do the replacement
+function s.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return true end
+    Duel.SetOperationInfo(0,CATEGORY_COUNTER,nil,1,0,0x301)
 end
 
 -- Operation: actually do the replacement
-function s.repop(e,tp,eg,ep,ev,re,r,rp)
-    Duel.RemoveCounter(tp,1,0,0x301,1,REASON_COST)
-    Duel.ChangeBattleDamage(tp,0) -- if battle damage is involved, nullify
+function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
+    -- remove 1 Akara Counter from this card
+    e:GetHandler():RemoveCounter(tp,0x300,1,REASON_COST)
+    -- prevent target monsters destruction this battle
+    local e1=Effect.CreateEffect(e:GetHandler())
+    e1:SetType(EFFECT_TYPE_FIELD)
+    e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
+    e1:SetTargetRange(LOCATION_MZONE,0)
+    e1:SetReset(RESET_PHASE+PHASE_DAMAGE)
+    e1:SetValue(1)
+    Duel.RegisterEffect(e1,tp)
+
+    -- take no battle damage this battle
+    Duel.ChangeBattleDamage(tp,0)
 end
 
 
