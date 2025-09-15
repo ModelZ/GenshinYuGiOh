@@ -25,7 +25,7 @@ function s.initial_effect(c)
 
 	-- If a card would be destroyed by battle (Quick Effect): You can remove 1 Akara Counter instead and take no damage.
     local e4=Effect.CreateEffect(c)
-    e4:SetType(EFFECT_TYPE_QUICK_O)
+    e4:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_SINGLE)
     e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
     e4:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
     e4:SetCondition(s.damcon)
