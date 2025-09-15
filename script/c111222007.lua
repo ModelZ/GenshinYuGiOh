@@ -93,7 +93,7 @@ function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
             -- Prevent battle damage
             e2:SetCode(EFFECT_AVOID_BATTLE_DAMAGE)
             tc:RegisterEffect(e2)
-            
+        end    
     end
 end
 
