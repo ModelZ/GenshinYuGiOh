@@ -38,6 +38,7 @@ function s.initial_effect(c)
     local e5=Effect.CreateEffect(c)
     e5:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
     e5:SetCode(EVENT_CHAINING)
+    e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
     e5:SetRange(LOCATION_ONFIELD)
     e5:SetCondition(s.protcon)
     e5:SetOperation(s.protop)
@@ -143,10 +144,15 @@ function s.protcon(e,tp,eg,ep,ev,re,r,rp)
     end
     Debug.Message("protcon: effect has CATEGORY_DESTROY")
 
-    -- Check if this card is affected by the effect
-    if not c:IsRelateToEffect(re) then
-        return false
+    -- Check if there is at least 1 face-up "Genshin" card you control
+    local g=Duel.GetMatchingGroup(function(c) return c:IsFaceup() and c:IsSetCard(0x700) and c:IsControler(tp) and not c:IsReason(REASON_DESTROY)
+         not c:IsOnField() or not c:IsFaceup() end, tp, LOCATION_MZONE, 0, nil)
+
+    if g:GetCount()==0 then 
+        return false 
     end
+
+    Debug.Message("protcon: you control at least 1 face-up Genshin card and would be destroyed by previous effect")
 
     -- Check that it has at least 1 Akara counter
     if c:GetCounter(0x301)<=0 then
