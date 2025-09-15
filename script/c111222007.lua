@@ -27,7 +27,7 @@ function s.initial_effect(c)
     -- You can remove 1 Akara Counter; that "Genshin" monster cannot destroy by battle or card effect and take no damage.
     local e4=Effect.CreateEffect(c)
     e4:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
-    e4:SetCode(EVENT_BATTLE_DESTROYING)
+    e4:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
     e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
     e4:SetRange(LOCATION_MZONE)
     e4:SetTarget(s.damtg)
