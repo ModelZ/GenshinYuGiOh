@@ -30,7 +30,7 @@ function s.initial_effect(c)
     e4:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
     e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
     e4:SetRange(LOCATION_MZONE)
-    e4:SetTarget(s.damtg)
+    e4:SetCondition(s.damcon)
     e4:SetOperation(s.damrepop)
     c:RegisterEffect(e4)
 
@@ -69,10 +69,10 @@ function s.acop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 -- Destruction replacement target
-function s.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
-    local c=e:GetHandler()
-    if chk==0 then return c:GetCounter(0x301)>0 end
-    return true
+function s.damcon(e,tp,eg,ep,ev,re,r,rp,chk)
+    local tc=Duel.GetAttackTarget()
+    return e:GetHandler():GetCounter(0x301)>0
+        tc:IsSetCard(0x700) and tc:IsControler(tp) and tc==e:GetHandler()
 end
 
 -- Destruction replacement operation
