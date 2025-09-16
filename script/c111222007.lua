@@ -188,7 +188,7 @@ end
 
 -- Can target your face-up monster that can accept counters
 function s.rdcntfilter(c)
-    return c:IsFaceup() and s.get_existing_counter_type(c)~=nil
+    return c:IsFaceup() and not GetAllCounters(c)==nil
 end
 
 function s.rdcnttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
@@ -199,16 +199,6 @@ function s.rdcnttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
     end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
     Duel.SelectTarget(tp,s.rdcntfilter,tp,LOCATION_MZONE,0,1,1,nil)
-end
-
--- Utility: find the first counter type a card already has
-function s.get_existing_counter_type(tc)
-    for ct=0,0xffff do
-        if tc:GetCounter(ct)>0 then
-            return ct
-        end
-    end
-    return nil
 end
 
 -- Operation: remove Akara counters and add same type as target already has
@@ -225,7 +215,7 @@ function s.rdcntop(e,tp,eg,ep,ev,re,r,rp)
     if ct<=0 or not c:RemoveCounter(tp,0x301,ct,REASON_EFFECT) then return end
 
     -- Find what type of counter tc already has
-    local counter_type=s.get_existing_counter_type(tc)
+    local counter_type=s.GetAllCounters(tc):GetFirst()
     if counter_type then
         tc:AddCounter(counter_type,ct)
     end
