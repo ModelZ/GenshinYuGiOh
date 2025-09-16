@@ -77,5 +77,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.aclimit(e,re,tp)
-	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsCode(e:GetLabel())
+    local code = e:GetLabel()
+    local rc = re:GetHandler()
+    return rc:IsCode(code)
 end
