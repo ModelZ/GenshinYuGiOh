@@ -14,16 +14,15 @@ function s.initial_effect(c)
 	--cannot respond
     local e2=Effect.CreateEffect(c)
     e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-    e2:SetCode(EVENT_CHAINING)
     e2:SetOperation(s.chainop)
     c:RegisterEffect(e2)
 
 	-- Add effects to prevent responses to this card's activation
-	e3 = e2:Clone()
+	local e3 = e2:Clone()
 	e3:SetCode(EFFECT_CANNOT_INACTIVATE)
 	c:RegisterEffect(e3)
 
-	e4 = e2:Clone()
+	local e4 = e2:Clone()
 	e4:SetCode(EFFECT_CANNOT_DISEFFECT)
 	c:RegisterEffect(e4)
 
