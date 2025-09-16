@@ -227,7 +227,13 @@ function s.rdcntop(e,tp,eg,ep,ev,re,r,rp)
 
     -- Choose how many to remove
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-    local ct=Duel.AnnounceNumber(tp,table.unpack({1,maxct}))
+    -- Generate a list {1,2,3,...,maxct}
+    local choices = {}
+    for i=1,maxct do
+        table.insert(choices,i)
+    end
+    -- Ask the player to choose
+    local ct = Duel.AnnounceNumber(tp,table.unpack(choices))
     if ct<=0 or not c:RemoveCounter(tp,0x301,ct,REASON_EFFECT) then return end
 
     -- Find the first counter type the target has
