@@ -19,6 +19,15 @@ function s.initial_effect(c)
     e2:SetOperation(s.chainop)
     c:RegisterEffect(e2)
 
+	-- Add effects to prevent responses to this card's activation
+	e3 = e2:Clone()
+	e3:SetCode(EFFECT_CANNOT_INACTIVATE)
+	c:RegisterEffect(e3)
+
+	e4 = e2:Clone()
+	e4:SetCode(EFFECT_CANNOT_DISEFFECT)
+	c:RegisterEffect(e4)
+
 end
 
 -- Prevent players from responding to this card activations
