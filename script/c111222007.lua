@@ -187,14 +187,14 @@ function s.protop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 
--- Can target your face-up monster that can accept counters
-function s.rdcntfilter(c)
+-- Can target your face-up monster that can accept counters (not itself)
+function s.rdcntfilter(c,sc)
     if not c:IsFaceup() then return false end
-    local counters = c:GetAllCounters()
+    if c==sc then return false end -- exclude self
+    local counters=c:GetAllCounters()
     if not counters then return false end
     for ct,_ in pairs(counters) do
-        -- found at least one counter type
-        return true
+        return true -- at least one counter type exists
     end
     return false
 end
@@ -206,14 +206,15 @@ function s.cntcon(e,tp,eg,ep,ev,re,r,rp)
     return Duel.IsExistingTarget(s.rdcntfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 
+-- Target function: can only select other face-up monsters
 function s.rdcnttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-    if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and s.rdcntfilter(chkc) end
+    if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and s.rdcntfilter(chkc,e:GetHandler()) end
     if chk==0 then 
         return e:GetHandler():GetCounter(0x301)>0
-           and Duel.IsExistingTarget(s.rdcntfilter,tp,LOCATION_MZONE,0,1,nil)
+           and Duel.IsExistingTarget(s.rdcntfilter,tp,LOCATION_MZONE,0,1,nil,e:GetHandler())
     end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-    Duel.SelectTarget(tp,s.rdcntfilter,tp,LOCATION_MZONE,0,1,1,nil)
+    Duel.SelectTarget(tp,s.rdcntfilter,tp,LOCATION_MZONE,0,1,1,nil,e:GetHandler())
 end
 
 -- Operation: remove Akara counters and add same type as target already has
@@ -229,8 +230,14 @@ function s.rdcntop(e,tp,eg,ep,ev,re,r,rp)
     local ct=Duel.AnnounceNumber(tp,table.unpack({1,maxct}))
     if ct<=0 or not c:RemoveCounter(tp,0x301,ct,REASON_EFFECT) then return end
 
-    -- Find what type of counter tc already has
-    local counter_type=s.GetAllCounters(tc):GetFirst()
+    -- Find the first counter type the target has
+    local counter_type
+    local counters = tc:GetAllCounters()
+    for k,_ in pairs(counters) do
+        counter_type = k
+        break
+    end
+
     if counter_type then
         tc:AddCounter(counter_type,ct)
     end
