@@ -188,7 +188,7 @@ end
 
 -- Can target your face-up monster that can accept counters
 function s.rdcntfilter(c)
-    return c:IsFaceup() and not GetAllCounters(c)==nil
+    return c:IsFaceup() and not c:GetAllCounters()==nil
 end
 
 function s.rdcnttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
