@@ -57,7 +57,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 			e1:SetTargetRange(0,1)
 			e1:SetValue(function(e,re,tp) return re:GetHandler():IsCode(code) end)
-			Duel.RegisterEffect(e1,tp,true) --true = cannot be disabled
+			Duel.RegisterEffect(e1,tp)
 		end
 	end
 end

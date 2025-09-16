@@ -78,6 +78,17 @@ function s.lightfilter(c,fc,sumtype,tp)
 	return c:IsSetCard(0x700) and c:IsAttribute(ATTRIBUTE_LIGHT)  -- "Genshin" LIGHT monster
 end
 
+-- Prevent opponent from responding to your "Genshin" card activations
+function s.chainop(e,tp,eg,ep,ev,re,r,rp)
+    local rc = re:GetHandler()
+    -- Check if the activating card is yours and is a "Genshin" card
+    if rc:IsSetCard(0x700) and rp==tp then
+        -- Set the chain limit so no one can respond to this chain link
+        Duel.SetChainLimit(aux.FALSE)
+    end
+end
+
+
 -- Place an Akara Counter when another card leaves the field (ignores itself)
 function s.acop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
