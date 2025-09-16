@@ -38,19 +38,25 @@ function s.initial_effect(c)
     local e5=Effect.CreateEffect(c)
     e5:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
     e5:SetCode(EVENT_CHAINING)
-    e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
+    e5:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
     e5:SetRange(LOCATION_ONFIELD)
     e5:SetCondition(s.protcon)
     e5:SetOperation(s.protop)
     c:RegisterEffect(e5)
 
-    -- If a card would be destroyed by card effect (Quick Effect): You can remove 1 Akara Counter instead and take no damage.
-    -- local e5=Effect.CreateEffect(c)
-    -- e5:SetType(EFFECT_TYPE_QUICK_O+EFFECT_TYPE_FIELD)
-
-
     -- You can remove any number of Akara counter(s) and target your monster that had the counter on it on the field (Quick Effect); 
     -- increase the number of that Counter by the number of removed Akara counter(s)..
+    local e6=Effect.CreateEffect(c)
+    e6:SetDescription(aux.Stringid(id,1))
+    e6:SetCategory(CATEGORY_COUNTER)
+    e6:SetType(EFFECT_TYPE_QUICK_O)
+    e6:SetCode(EVENT_FREE_CHAIN)
+    e6:SetRange(LOCATION_MZONE)
+    e6:SetProperty(EFFECT_FLAG_CARD_TARGET)
+    e6:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E+TIMING_END_PHASE)
+    e6:SetTarget(s.rdcnttg)
+    e6:SetOperation(s.rdcntop)
+    c:RegisterEffect(e6)
 
 end
 
@@ -107,26 +113,6 @@ function s.damrepop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 
--- function s.protcon(e,tp,eg,ep,ev,re,r,rp)
---     local c=e:GetHandler()
---     Debug.Message("protcon called")
-
---     -- Only opponent's card effect
---     if rp==tp or not re:IsActiveType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP) then return false end
---     Debug.Message("protcon: opponent's effect")
-
---     -- Check previous chain link
---     local prev = Duel.GetChainInfo(ev-1, CHAININFO_TRIGGERING_EFFECT)
---     if not prev then return false end
---     Debug.Message("protcon: previous chain link exists")
---     local rc = prev:GetHandler()
-
---     -- Check that the effect has CATEGORY_DESTROY
---     if not rc:IsHasCategory(CATEGORY_DESTROY) then return false end
---     Debug.Message("protcon: effect has CATEGORY_DESTROY")
---     -- Check that the card has at least 1 Akara counter
---     return c:GetCounter(0x301)>0
--- end
 
 function s.protcon(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
@@ -198,5 +184,50 @@ function s.protop(e,tp,eg,ep,ev,re,r,rp)
         tc:RegisterEffect(e2)
 
     end
+end
+
+-- Can target your face-up monster that can accept counters
+function s.rdcntfilter(c)
+    return c:IsFaceup() and s.get_existing_counter_type(c)~=nil
+end
+
+function s.rdcnttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+    if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and s.rdcntfilter(chkc) end
+    if chk==0 then 
+        return e:GetHandler():GetCounter(0x301)>0
+           and Duel.IsExistingTarget(s.rdcntfilter,tp,LOCATION_MZONE,0,1,nil)
+    end
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+    Duel.SelectTarget(tp,s.rdcntfilter,tp,LOCATION_MZONE,0,1,1,nil)
+end
+
+-- Utility: find the first counter type a card already has
+function s.get_existing_counter_type(tc)
+    for ct=0,0xffff do
+        if tc:GetCounter(ct)>0 then
+            return ct
+        end
+    end
+    return nil
+end
+
+-- Operation: remove Akara counters and add same type as target already has
+function s.rdcntop(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    local tc=Duel.GetFirstTarget()
+    if not tc or not tc:IsRelateToEffect(e) or tc:IsFacedown() then return end
+    local maxct=c:GetCounter(0x301)
+    if maxct<=0 then return end
+
+    -- Choose how many to remove
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+    local ct=Duel.AnnounceNumber(tp,table.unpack({1,maxct}))
+    if ct<=0 or not c:RemoveCounter(tp,0x301,ct,REASON_EFFECT) then return end
+
+    -- Find what type of counter tc already has
+    local counter_type=s.get_existing_counter_type(tc)
+    if counter_type then
+        tc:AddCounter(counter_type,ct)
+    else
 end
 
