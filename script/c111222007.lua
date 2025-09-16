@@ -228,6 +228,6 @@ function s.rdcntop(e,tp,eg,ep,ev,re,r,rp)
     local counter_type=s.get_existing_counter_type(tc)
     if counter_type then
         tc:AddCounter(counter_type,ct)
-    else
+    end
 end
 
