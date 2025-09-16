@@ -51,19 +51,24 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
 	end
 end
+
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
+	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) and Duel.Destroy(eg,REASON_EFFECT)~=0 then
 		if Duel.Destroy(eg,REASON_EFFECT)>0 then
 			--Lock name for the rest of the Duel
 			local c=e:GetHandler()
-			local code=re:GetHandler():GetOriginalCode()
 			local e1=Effect.CreateEffect(c)
 			e1:SetType(EFFECT_TYPE_FIELD)
 			e1:SetCode(EFFECT_CANNOT_ACTIVATE)
 			e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 			e1:SetTargetRange(0,1)
-			e1:SetValue(function(e,re,tp) return re:GetHandler():IsCode(code) end)
-			Duel.RegisterEffect(e1,tp)
+			e1:SetValue(s.aclimit)
+			e1:SetLabel(re:GetHandler():GetCode())
+			Duel.RegisterEffect(e1,tp,true) -- Infinite duration
 		end
 	end
+end
+
+function s.aclimit(e,re,tp)
+	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsCode(e:GetLabel())
 end
