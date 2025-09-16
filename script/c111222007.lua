@@ -54,6 +54,7 @@ function s.initial_effect(c)
     e6:SetRange(LOCATION_MZONE)
     e6:SetProperty(EFFECT_FLAG_CARD_TARGET)
     e6:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E+TIMING_END_PHASE)
+    e6:SetCondition(s.cntcon)
     e6:SetTarget(s.rdcnttg)
     e6:SetOperation(s.rdcntop)
     c:RegisterEffect(e6)
@@ -189,6 +190,11 @@ end
 -- Can target your face-up monster that can accept counters
 function s.rdcntfilter(c)
     return c:IsFaceup() and not c:GetAllCounters()==nil
+end
+
+-- Condition: at least 1 valid target exists
+function s.cntcon(e,tp,eg,ep,ev,re,r,rp)
+    return Duel.IsExistingTarget(s.rdcntfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 
 function s.rdcnttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
