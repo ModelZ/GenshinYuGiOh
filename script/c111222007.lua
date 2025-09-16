@@ -189,7 +189,7 @@ end
 
 -- Can target your face-up monster that can accept counters
 function s.rdcntfilter(c)
-    Debug.Message("rdcntfilter called on "..c:GetName()..": faceup="..tostring(c:IsFaceup()).." hascounters="..tostring(not c:GetAllCounters()==nil))
+    Debug.Message("rdcntfilter called on: faceup="..tostring(c:IsFaceup()).." hascounters="..tostring(not c:GetAllCounters()==nil))
     return c:IsFaceup() and not c:GetAllCounters()==nil
 end
 
