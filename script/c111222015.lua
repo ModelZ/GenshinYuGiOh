@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	-- Add flag to prevent negation or inactivation of this card's activation
-	e1:SetProperty(EFFECT_FLAG_CANNOT_INACTIVATE+EFFECT_FLAG_CANNOT_DISABLE)
+	-- e1:SetProperty(EFFECT_FLAG_CANNOT_INACTIVATE+EFFECT_FLAG_CANNOT_DISABLE)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetCondition(s.condition)
 	e1:SetCost(s.cost)
@@ -58,7 +58,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) and Duel.Destroy(eg,REASON_EFFECT)~=0 then
+	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
 		if Duel.Destroy(eg,REASON_EFFECT)>0 then
 			--Lock name for the rest of the Duel
 			local c=e:GetHandler()
@@ -70,6 +70,8 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetValue(s.aclimit)
 			e1:SetLabel(re:GetHandler():GetCode())
 			Duel.RegisterEffect(e1,tp,true) -- Infinite duration
+
+			Debug.Message("Locked card name: "..tostring(re:GetHandler():GetCode()))
 		end
 	end
 end
