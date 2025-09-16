@@ -226,7 +226,7 @@ function s.rdcntop(e,tp,eg,ep,ev,re,r,rp)
     if maxct<=0 then return end
 
     -- Choose how many to remove
-    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+    Duel.Hint(HINT_NUMBER,tp,HINTMSG_NUMBER)
     -- Generate a list {1,2,3,...,maxct}
     local choices = {}
     for i=1,maxct do
