@@ -202,7 +202,7 @@ end
 
 -- Condition: at least 1 valid target exists
 function s.cntcon(e,tp,eg,ep,ev,re,r,rp)
-    Debug.Message("cntcon called: "..tostring(Duel.IsExistingTarget(s.rdcntfilter,tp,LOCATION_MZONE,0,1,nil)))
+    -- Debug.Message("cntcon called: "..tostring(Duel.IsExistingTarget(s.rdcntfilter,tp,LOCATION_MZONE,0,1,nil)))
     return Duel.IsExistingTarget(s.rdcntfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 
