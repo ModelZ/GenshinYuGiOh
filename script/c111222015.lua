@@ -12,14 +12,20 @@ function s.initial_effect(c)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 	--cannot respond
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_CANNOT_INACTIVATE)
-	e2:SetValue(function(e,ct) return true end)
-	c:RegisterEffect(e2)
-	local e3=e2:Clone()
-	e3:SetCode(EFFECT_CANNOT_DISEFFECT)
-	c:RegisterEffect(e3)
+    local e2=Effect.CreateEffect(c)
+    e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e2:SetCode(EVENT_CHAINING+EFFECT_CANNOT_INACTIVATE+EFFECT_CANNOT_DISEFFECT)
+    e2:SetRange(LOCATION_MZONE)
+    e2:SetOperation(s.chainop)
+    c:RegisterEffect(e2)
+
+end
+
+-- Prevent players from responding to this card activations
+function s.chainop(e,tp,eg,ep,ev,re,r,rp)
+	-- Set the chain limit so no one can respond to this chain link
+	Duel.SetChainLimit(aux.FALSE)
+
 end
 
 --Check if you control a "Genshin" Fusion Monster
