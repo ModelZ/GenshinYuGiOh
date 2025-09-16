@@ -180,23 +180,23 @@ function s.protop(e,tp,eg,ep,ev,re,r,rp)
 
     -- Give indestructible + no effect damage to each targeted monster
     for tc in aux.Next(tg) do
-        if tc:IsRelateToEffect(re) then
-            -- Indestructible against this effect
-            local e1=Effect.CreateEffect(c)
-            e1:SetType(EFFECT_TYPE_SINGLE)
-            e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-            e1:SetValue(1)
-            e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_CHAIN)
-            tc:RegisterEffect(e1)
 
-            -- Prevent damage from this effect (if applicable)
-            local e2=Effect.CreateEffect(c)
-            e2:SetType(EFFECT_TYPE_SINGLE)
-            e2:SetCode(EFFECT_NO_EFFECT_DAMAGE)
-            e2:SetValue(1)
-            e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_CHAIN)
-            tc:RegisterEffect(e2)
-        end
+        -- Indestructible against this effect
+        local e1=Effect.CreateEffect(c)
+        e1:SetType(EFFECT_TYPE_SINGLE)
+        e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+        e1:SetValue(1)
+        e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_CHAIN)
+        tc:RegisterEffect(e1)
+
+        -- Prevent damage from this effect (if applicable)
+        local e2=Effect.CreateEffect(c)
+        e2:SetType(EFFECT_TYPE_SINGLE)
+        e2:SetCode(EFFECT_NO_EFFECT_DAMAGE)
+        e2:SetValue(1)
+        e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_CHAIN)
+        tc:RegisterEffect(e2)
+
     end
 end
 
