@@ -5,26 +5,21 @@ function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	-- Add flag to prevent negation or inactivation of this card's activation
+	e1:SetProperty(EFFECT_FLAG_CANNOT_INACTIVATE+EFFECT_FLAG_CANNOT_DISABLE)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetCondition(s.condition)
 	e1:SetCost(s.cost)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
-	--cannot respond
+	-- Add effects to prevent responses to this card's activation
     local e2=Effect.CreateEffect(c)
     e2:SetType(EFFECT_TYPE_ACTIVATE)
     e2:SetOperation(s.chainop)
     c:RegisterEffect(e2)
 
-	-- Add effects to prevent responses to this card's activation
-	local e3 = e2:Clone()
-	e3:SetCode(EFFECT_CANNOT_INACTIVATE)
-	c:RegisterEffect(e3)
-
-	local e4 = e2:Clone()
-	e4:SetCode(EFFECT_CANNOT_DISEFFECT)
-	c:RegisterEffect(e4)
+	
 
 end
 
