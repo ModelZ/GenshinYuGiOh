@@ -13,8 +13,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	--cannot respond
     local e2=Effect.CreateEffect(c)
-    e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e1:SetValue(1)
+    e2:SetType(EFFECT_TYPE_ACTIVATE)
     e2:SetOperation(s.chainop)
     c:RegisterEffect(e2)
 
