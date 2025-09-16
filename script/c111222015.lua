@@ -14,7 +14,7 @@ function s.initial_effect(c)
 	--cannot respond
     local e2=Effect.CreateEffect(c)
     e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-    e2:SetCode(EVENT_CHAINING+EFFECT_CANNOT_INACTIVATE+EFFECT_CANNOT_DISEFFECT)
+    e2:SetCode(EVENT_CHAINING)
     e2:SetRange(LOCATION_MZONE)
     e2:SetOperation(s.chainop)
     c:RegisterEffect(e2)
