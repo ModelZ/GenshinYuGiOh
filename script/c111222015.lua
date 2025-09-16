@@ -30,6 +30,7 @@ end
 
 -- Prevent players from responding to this card activations
 function s.chainop(e,tp,eg,ep,ev,re,r,rp)
+	Debug.Message("chainop called")
 	-- Set the chain limit so no one can respond to this chain link
 	Duel.SetChainLimit(aux.FALSE)
 
