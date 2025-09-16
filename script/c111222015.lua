@@ -71,7 +71,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetLabel(re:GetHandler():GetCode())
 			Duel.RegisterEffect(e1,tp,true) -- Infinite duration
 
-			Debug.Message("Locked card name: "..tostring(re:GetHandler():GetCode()))
+			-- Debug.Message("Locked card name: "..tostring(re:GetHandler():GetCode()))
 		end
 	end
 end
