@@ -13,23 +13,23 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
-	-- Add effects to prevent responses to this card's activation
-    local e2=Effect.CreateEffect(c)
-    e2:SetType(EFFECT_TYPE_ACTIVATE)
-    e2:SetOperation(s.chainop)
-    c:RegisterEffect(e2)
+	-- -- Add effects to prevent responses to this card's activation
+    -- local e2=Effect.CreateEffect(c)
+    -- e2:SetType(EFFECT_TYPE_ACTIVATE)
+    -- e2:SetOperation(s.chainop)
+    -- c:RegisterEffect(e2)
 
 	
 
 end
 
--- Prevent players from responding to this card activations
-function s.chainop(e,tp,eg,ep,ev,re,r,rp)
-	Debug.Message("chainop called")
-	-- Set the chain limit so no one can respond to this chain link
-	Duel.SetChainLimit(aux.FALSE)
+-- -- Prevent players from responding to this card activations
+-- function s.chainop(e,tp,eg,ep,ev,re,r,rp)
+-- 	Debug.Message("chainop called")
+-- 	-- Set the chain limit so no one can respond to this chain link
+-- 	Duel.SetChainLimit(aux.FALSE)
 
-end
+-- end
 
 --Check if you control a "Genshin" Fusion Monster
 function s.cfilter(c)
@@ -49,6 +49,8 @@ end
 --Negate + destroy + lock card name
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
+	-- Prevent players from responding to this card activations
+	Duel.SetChainLimit(aux.FALSE)
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	if re:GetHandler():IsRelateToEffect(re) then
 		Duel.SetOperationInfo(0,CATEGORY_DESTROY,eg,1,0,0)
