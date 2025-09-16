@@ -154,7 +154,7 @@ function s.protcon(e,tp,eg,ep,ev,re,r,rp)
     -- Check previous chain link
     local ex,tg,tc=Duel.GetOperationInfo(ev,CATEGORY_DESTROY)
     
-    Debug.Message("protcon: ex="..tostring(ex).." tg="..tostring(tg).." tc="..tostring(tc))
+    -- Debug.Message("protcon: ex="..tostring(ex).." tg="..tostring(tg).." tc="..tostring(tc))
 
     -- Check if there is at least 1 face-up "Genshin" card you control that would be destroyed by the previous effect
     return ex and tg~=nil and tc+tg:FilterCount(Card.IsOnField,nil)-#tg>0 and
@@ -170,7 +170,7 @@ function s.protop(e,tp,eg,ep,ev,re,r,rp)
     local ex,tg,tc=Duel.GetOperationInfo(ev,CATEGORY_DESTROY)
     if not tg then return end
 
-    Debug.Message("protop: ex="..tostring(ex).." tg="..tostring(tg).." tc="..tostring(tc))
+    -- Debug.Message("protop: ex="..tostring(ex).." tg="..tostring(tg).." tc="..tostring(tc))
 
     local c=e:GetHandler()
     if c:GetCounter(0x301)<=0 then return end
