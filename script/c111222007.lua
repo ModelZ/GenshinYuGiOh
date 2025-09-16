@@ -189,9 +189,16 @@ end
 
 -- Can target your face-up monster that can accept counters
 function s.rdcntfilter(c)
-    Debug.Message("rdcntfilter called on: faceup="..tostring(c:IsFaceup()).." hascounters="..tostring(c:GetAllCounters():GetFirst()))
-    return c:IsFaceup() and not c:GetAllCounters()==nil
+    if not c:IsFaceup() then return false end
+    local counters = c:GetAllCounters()
+    if not counters then return false end
+    for ct,_ in pairs(counters) do
+        -- found at least one counter type
+        return true
+    end
+    return false
 end
+
 
 -- Condition: at least 1 valid target exists
 function s.cntcon(e,tp,eg,ep,ev,re,r,rp)
