@@ -170,6 +170,8 @@ function s.protop(e,tp,eg,ep,ev,re,r,rp)
     local ex,tg,tc=Duel.GetOperationInfo(ev,CATEGORY_DESTROY)
     if not tg then return end
 
+    Debug.Message("protop: ex="..tostring(ex).." tg="..tostring(tg).." tc="..tostring(tc))
+
     local c=e:GetHandler()
     if c:GetCounter(0x301)<=0 then return end
 
