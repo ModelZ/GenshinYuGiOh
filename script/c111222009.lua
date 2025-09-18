@@ -152,51 +152,56 @@ end
 
 function s.leavetg(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
-    local rc=re and re:GetHandler() or nil
     Debug.Message("leavetg triggered")
     if chk==0 then
-        local ok=rc and rc:IsRelateToEffect(re) and rc:IsDestructable()
-            and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+        -- Only check if you can special summon your card
+        local ok=Duel.GetLocationCount(tp,LOCATION_MZONE)>0
             and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
         Debug.Message("leavetg chk result: "..tostring(ok))
         return ok
     end
+
+    local rc=re and re:GetHandler() or nil
     if rc then Debug.Message("leavetg targeting card: "..rc:GetCode()) end
-    Duel.SetOperationInfo(0, CATEGORY_DESTROY, rc,1,0,0)
+
+    -- Still set operation info for clarity
     Duel.SetOperationInfo(0, CATEGORY_SPECIAL_SUMMON, c,1,0,0)
     Duel.SetOperationInfo(0, CATEGORY_COUNTER, c,1,0,0)
+    if rc and rc:IsDestructable() then
+        Duel.SetOperationInfo(0, CATEGORY_DESTROY, rc,1,0,0)
+    end
 end
 
 function s.leaveop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     local rc=re and re:GetHandler() or nil
     Debug.Message("leaveop triggered")
-    if rc then
-        Debug.Message("leaveop: rc="..rc:GetCode())
-    else
-        Debug.Message("leaveop: rc is nil")
-    end
-    if rc and rc:IsRelateToEffect(re) then
+
+    -- Attempt to destroy target if valid
+    if rc and rc:IsRelateToEffect(re) and rc:IsDestructable() then
         if Duel.Destroy(rc, REASON_EFFECT)>0 then
             Debug.Message("leaveop: destroyed rc")
-            if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-                if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
-                    Debug.Message("leaveop: special summoned c")
-                    c:AddCounter(0x303,1)
-                    Debug.Message("leaveop: added 1 Lighting Counter")
-                else
-                    Debug.Message("leaveop: failed to special summon c")
-                end
-            else
-                Debug.Message("leaveop: no monster zone available")
-            end
         else
             Debug.Message("leaveop: failed to destroy rc")
         end
     else
-        Debug.Message("leaveop: rc not valid")
+        Debug.Message("leaveop: rc not valid or not destructable, skipping destroy")
+    end
+
+    -- Always special summon and add counter if possible
+    if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and c:IsCanBeSpecialSummoned(e,0,tp,false,false) then
+        if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
+            Debug.Message("leaveop: special summoned c")
+            c:AddCounter(0x303,1)
+            Debug.Message("leaveop: added 1 Lighting Counter")
+        else
+            Debug.Message("leaveop: failed to special summon c")
+        end
+    else
+        Debug.Message("leaveop: no monster zone available or cannot special summon")
     end
 end
+
 
 
 -- Effect D: negate opponent’s Spell/Trap activation, shuffle to Deck
