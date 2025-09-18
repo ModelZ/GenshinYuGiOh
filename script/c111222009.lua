@@ -11,9 +11,10 @@ function s.initial_effect(c)
     -- Effect A: If this card is Fusion Summoned → banish all opponent’s cards from GY + place 1 Lighting Counter
     local e1=Effect.CreateEffect(c)
     e1:SetDescription(aux.Stringid(id,0))
-    e1:SetCategory(CATEGORY_REMOVE)
+    e1:SetCategory(CATEGORY_REMOVE+CATEGORY_COUNTER)
     e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
     e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+    e1:SetCountLimit(1,id)
     e1:SetCondition(function(e,tp,eg,ep,ev,re,r,rp)
         return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
     end)
@@ -92,6 +93,7 @@ function s.banishop(e,tp,eg,ep,ev,re,r,rp)
         Duel.Remove(g, POS_FACEUP, REASON_EFFECT)
     end
     -- Regardless, place 1 Lighting Counter on this card
+    Debug.Message("banishop: adding 1 Lighting Counter")
     c:AddCounter(0x303,1)
 end
 
