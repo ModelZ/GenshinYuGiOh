@@ -139,9 +139,7 @@ function s.leavecost(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return has end
 
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-    local g=Duel.SelectMatchingCard(tp,function(cc)
-        return cc:IsCanRemoveCounter(tp,0,1,REASON_COST)
-    end,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+    local g=Duel.SelectMatchingCard(tp,hasCounter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
 
     local rc=g:GetFirst()
     if rc then
