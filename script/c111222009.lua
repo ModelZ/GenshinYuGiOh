@@ -93,7 +93,7 @@ function s.banishop(e,tp,eg,ep,ev,re,r,rp)
         Duel.Remove(g, POS_FACEUP, REASON_EFFECT)
     end
     -- Regardless, place 1 Lighting Counter on this card
-    Debug.Message("banishop: adding 1 Lighting Counter")
+    -- Debug.Message("banishop: adding 1 Lighting Counter")
     c:AddCounter(0x303,1)
 end
 
@@ -112,8 +112,8 @@ end
 
 function s.leavecon(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    Debug.Message("leavecon triggered")
-    Debug.Message("rp="..rp.." tp="..tp.." r="..r.." re="..tostring(re))
+    -- Debug.Message("leavecon triggered")
+    -- Debug.Message("rp="..rp.." tp="..tp.." r="..r.." re="..tostring(re))
 
     return rp~=tp
         and c:IsPreviousLocation(LOCATION_ONFIELD)
@@ -133,11 +133,11 @@ local function hasCounter(cc, tp)
 end
 
 function s.leavecost(e,tp,eg,ep,ev,re,r,rp,chk)
-    Debug.Message("leavecost check")
+    -- Debug.Message("leavecost check")
 
     -- Check if there is any counter on your field that can be removed
     local has=Duel.IsExistingMatchingCard(hasCounter, tp, LOCATION_ONFIELD, LOCATION_ONFIELD, 1, nil, tp)
-    Debug.Message("leavecost available? "..tostring(has))
+    -- Debug.Message("leavecost available? "..tostring(has))
     if chk==0 then return has end
 
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
@@ -149,12 +149,12 @@ function s.leavecost(e,tp,eg,ep,ev,re,r,rp,chk)
         for ct,_ in pairs(counters) do
             if rc:IsCanRemoveCounter(tp, ct, 1, REASON_COST) then
                 rc:RemoveCounter(tp, ct, 1, REASON_COST)
-                Debug.Message("leavecost removed counter type "..ct.." from "..rc:GetCode())
+                -- Debug.Message("leavecost removed counter type "..ct.." from "..rc:GetCode())
                 break
             end
         end
     else
-        Debug.Message("leavecost failed to select")
+        -- Debug.Message("leavecost failed to select")
     end
 end
 
