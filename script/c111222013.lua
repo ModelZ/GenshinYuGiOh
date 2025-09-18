@@ -70,7 +70,7 @@ function s.fusioncheck(fc,sg,tp)
 	end
 	
 	--Default check for any "Genshin" Fusion
-	return true
+	return false
 end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
