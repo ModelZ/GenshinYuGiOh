@@ -114,9 +114,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 
--- Condition to negate summon
+-- Condition to negate any Summon by opponent
 function s.condition1(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.GetCurrentChain()==0 and ep~=tp -- only when opponent is summoning
+    return eg:IsExists(function(c) return c:IsControler(1-tp) end, 1, nil)
 end
 
 -- Cost to remove counter for summon negation
