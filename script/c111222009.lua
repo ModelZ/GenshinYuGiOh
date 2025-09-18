@@ -120,9 +120,12 @@ function s.leavecon(e,tp,eg,ep,ev,re,r,rp)
         and (r & REASON_EFFECT)~=0   -- only care that it was by effect
 end
 
-local function hasCounter(cc,tp)
-    for ct,num in pairs(cc:GetAllCounters()) do
-        if cc:IsCanRemoveCounter(tp,ct,1,REASON_COST) then
+-- Filter function: check if card has any removable counter
+local function hasCounter(cc, tp)
+    local counters = cc:GetAllCounters()
+    if not counters then return false end
+    for ct,_ in pairs(counters) do
+        if cc:IsCanRemoveCounter(tp, ct, 1, REASON_COST) then
             return true
         end
     end
@@ -131,24 +134,30 @@ end
 
 function s.leavecost(e,tp,eg,ep,ev,re,r,rp,chk)
     Debug.Message("leavecost check")
-    
-    -- Check if there is any counter on your field that can be removed
-    local has=Duel.IsExistingMatchingCard(hasCounter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil,tp) 
 
+    -- Check if there is any counter on your field that can be removed
+    local has=Duel.IsExistingMatchingCard(hasCounter, tp, LOCATION_ONFIELD, LOCATION_ONFIELD, 1, nil, tp)
     Debug.Message("leavecost available? "..tostring(has))
     if chk==0 then return has end
 
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-    local g=Duel.SelectMatchingCard(tp,hasCounter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
-
+    local g=Duel.SelectMatchingCard(tp, hasCounter, tp, LOCATION_ONFIELD, LOCATION_ONFIELD, 1, 1, nil, tp)
     local rc=g:GetFirst()
     if rc then
-        rc:RemoveCounter(tp,0,1,REASON_COST)
-        Debug.Message("leavecost removed from "..rc:GetCode())
+        -- Remove 1 counter of the first available type
+        local counters = rc:GetAllCounters()
+        for ct,_ in pairs(counters) do
+            if rc:IsCanRemoveCounter(tp, ct, 1, REASON_COST) then
+                rc:RemoveCounter(tp, ct, 1, REASON_COST)
+                Debug.Message("leavecost removed counter type "..ct.." from "..rc:GetCode())
+                break
+            end
+        end
     else
         Debug.Message("leavecost failed to select")
     end
 end
+
 
 function s.leavetg(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
