@@ -8,8 +8,7 @@ Your opponent cannot activate a card or effect response to your "Genshin" card. 
 
 Raiden Shogun ATK 3500 DEF 2500 DARK
 1 "Inazuma" monster + 1 "Genshin" DARK monster
-Your Lighting Counters on this card won't be removed after this card leaves the field.
-If this card is fusion summoned: you can banish all the opponent's cards from the GY, also Place 1 Lighting Counter on this card. When your opponent's monster effect is activated, you can Place 1 Lighting Counter on this card. If this card leaves the field by your opponent's card effect (Quick Effect): you can remove 1 Lighting Counter; destroy that card, also, after that Special Summon this card.
+If this card is fusion summoned: you can banish all the opponent's cards from the GY, also Place 1 Lighting Counter on this card. When your opponent's monster effect is activated, you can Place 1 Lighting Counter on this card. If this card leaves the field by your opponent's card effect (Quick Effect): you can remove 1 Any Counter on your field; destroy that card, also, after that Special Summon this card, then you can Place 1 Lighting Counter on this card. When your opponent's Spell/Trap Card is activated (Quick Effect): you can remove 1 Lighting Counter from this card; negate the activation, and if you do, shuffle that card to the Deck.
 
 Goddess Lumine
 3 "Genshin" Fusion monsters
