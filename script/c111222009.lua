@@ -118,12 +118,20 @@ function s.leavecon(e,tp,eg,ep,ev,re,r,rp)
         and (r & REASON_EFFECT)~=0   -- only care that it was by effect
 end
 
+local function hasCounter(cc,tp)
+    for ct,num in pairs(cc:GetAllCounters()) do
+        if cc:IsCanRemoveCounter(tp,ct,1,REASON_COST) then
+            return true
+        end
+    end
+    return false
+end
 
 function s.leavecost(e,tp,eg,ep,ev,re,r,rp,chk)
     Debug.Message("leavecost check")
-    local has=Duel.IsExistingMatchingCard(function(cc)
-        return cc:IsCanRemoveCounter(tp,0,1,REASON_COST)
-    end,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
+    
+    -- Check if there is any counter on your field that can be removed
+    local has=Duel.IsExistingMatchingCard(hasCounter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil,tp) 
 
     Debug.Message("leavecost available? "..tostring(has))
     if chk==0 then return has end
