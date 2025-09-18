@@ -140,7 +140,7 @@ function s.spfilter2(c)
     return c:IsSetCard(0x700) and c:IsType(TYPE_FUSION) and c:IsAbleToExtra()
 end
 
-function s.spcon(e,c)
+function s.spcon2(e,c)
     if c==nil then return true end
     local tp=c:GetControler()
     local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
@@ -148,7 +148,7 @@ function s.spcon(e,c)
 end
 
 -- Special Summon operation: shuffle 3 "Genshin" Fusion monsters into Extra Deck
-function s.spop(e,tp,eg,ep,ev,re,r,rp,c)
+function s.spop2(e,tp,eg,ep,ev,re,r,rp,c)
     local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
     local sg=g:Select(tp,3,3,nil)
