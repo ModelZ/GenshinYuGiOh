@@ -111,37 +111,34 @@ end
 function s.leavecon(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     Debug.Message("leavecon triggered")
-    if not re then
-        Debug.Message("leavecon: re is nil")
-    else
-        Debug.Message("leavecon: re = "..re:GetDescription())
-    end
-    Debug.Message("rp="..rp.." tp="..tp.." r="..r)
+    Debug.Message("rp="..rp.." tp="..tp.." r="..r.." re="..tostring(re))
+
     return rp~=tp
         and c:IsPreviousLocation(LOCATION_ONFIELD)
-        and (re and re:IsActivated())
-        and (r & REASON_EFFECT)~=0
+        and (r & REASON_EFFECT)~=0   -- only care that it was by effect
 end
+
 
 function s.leavecost(e,tp,eg,ep,ev,re,r,rp,chk)
     Debug.Message("leavecost check")
-    if chk==0 then 
-        local ok=Duel.IsExistingMatchingCard(function(cc)
-            return cc:IsCanRemoveCounter(tp,0,1,1,REASON_COST)
-        end,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
-        Debug.Message("leavecost chk result: "..tostring(ok))
-        return ok
-    end
+    local has=Duel.IsExistingMatchingCard(function(cc)
+        return cc:IsCanRemoveCounter(tp,0,1,REASON_COST)
+    end,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
+
+    Debug.Message("leavecost available? "..tostring(has))
+    if chk==0 then return has end
+
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
     local g=Duel.SelectMatchingCard(tp,function(cc)
-        return cc:IsCanRemoveCounter(tp,0,1,1,REASON_COST)
+        return cc:IsCanRemoveCounter(tp,0,1,REASON_COST)
     end,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+
     local rc=g:GetFirst()
     if rc then
-        Debug.Message("leavecost removing counter from "..rc:GetCode())
-        rc:RemoveCounter(tp,0,1,1,REASON_COST)
+        rc:RemoveCounter(tp,0,1,REASON_COST)
+        Debug.Message("leavecost removed from "..rc:GetCode())
     else
-        Debug.Message("leavecost: no card selected")
+        Debug.Message("leavecost failed to select")
     end
 end
 
