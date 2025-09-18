@@ -79,7 +79,8 @@ end
 
 -- Check fusion summon
 function s.fuscon(e,tp,eg,ep,ev,re,r,rp)
-    Debug.Message("IsSummonType: "..tostring(e:GetHandler():IsSummon))
+    Debug.Message("fuscon check")
+    Debug.Message("IsSummonType: "..tostring(e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)))
     return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end
 
