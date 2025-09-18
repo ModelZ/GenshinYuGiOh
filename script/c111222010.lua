@@ -152,6 +152,16 @@ function s.spop2(e,tp,eg,ep,ev,re,r,rp,c)
     local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
     local sg=g:Select(tp,3,3,nil)
+    
+    -- Set materials for proper Fusion Summon
+    c:SetMaterial(sg)
+    
+    -- Shuffle selected monsters into Extra Deck as fusion materials
     Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
+    
+    -- Special Summon the Fusion Monster
     Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+    
+    -- Complete procedure so it's treated as Fusion Summoned
+    c:CompleteProcedure()
 end
