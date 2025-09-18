@@ -1,3 +1,4 @@
 0x300 Lullaby Counter
 0x301 Akara Counter
 0x302 Pillar Counter
+0x303 Lighting Counter

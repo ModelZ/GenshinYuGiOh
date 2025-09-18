@@ -75,18 +75,26 @@ end
 -- Effect A: Banish opponent’s GY + place Lighting Counter
 
 function s.banishtg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsExistingMatchingCard(aux.TRUE,tp,0,LOCATION_GRAVE,1,nil) end
-    Duel.SetOperationInfo(0, CATEGORY_REMOVE, nil, 1, 1-tp, LOCATION_GRAVE)
+    if chk==0 then 
+        return true  -- always allow the effect, even if there's nothing to banish 
+    end
+    -- Set info for banish if possible
+    if Duel.IsExistingMatchingCard(aux.TRUE,tp,0,LOCATION_GRAVE,1,nil) then
+        Duel.SetOperationInfo(0, CATEGORY_REMOVE, nil, 1, 1-tp, LOCATION_GRAVE)
+    end
 end
 
 function s.banishop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
+    -- Attempt to banish if possible
     local g=Duel.GetMatchingGroup(aux.TRUE, tp, 0, LOCATION_GRAVE, nil)
     if #g>0 then
         Duel.Remove(g, POS_FACEUP, REASON_EFFECT)
-        c:AddCounter(0x304,1)
     end
+    -- Regardless, place 1 Lighting Counter on this card
+    c:AddCounter(0x304,1)
 end
+
 
 -- Effect B: place counter when opponent monster effect activates
 
