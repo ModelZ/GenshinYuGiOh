@@ -9,7 +9,16 @@ function s.initial_effect(c)
             return c:IsSetCard(0x700) and c:IsType(TYPE_FUSION) 
         end),
     3)
-
+    
+    -- Fusion Summon procedure without Fusion Spell
+    local e00=Effect.CreateEffect(c)
+    e00:SetType(EFFECT_TYPE_FIELD)
+    e00:SetCode(EFFECT_SPSUMMON_PROC)
+    e00:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+    e00:SetRange(LOCATION_EXTRA)
+    e00:SetCondition(s.spcon2)
+    e00:SetOperation(s.spop2)
+    c:RegisterEffect(e00)
 
     -- Cannot be affected by other cards, summon cannot be negated or tributed
     local e0=Effect.CreateEffect(c)
@@ -124,4 +133,25 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
         local g=Duel.GetMatchingGroup(Card.IsCode,tp,0,LOCATION_DECK+LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,nil,code)
         Duel.Remove(g,POS_FACEDOWN,REASON_EFFECT)
     end
+end
+
+-- Check if you can summon Goddess Lumine
+function s.spfilter2(c)
+    return c:IsSetCard(0x700) and c:IsType(TYPE_FUSION) and c:IsAbleToExtra()
+end
+
+function s.spcon(e,c)
+    if c==nil then return true end
+    local tp=c:GetControler()
+    local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
+    return #g>=3 and Duel.GetLocationCountFromEx(tp,tp,g,c)>0
+end
+
+-- Special Summon operation: shuffle 3 "Genshin" Fusion monsters into Extra Deck
+function s.spop(e,tp,eg,ep,ev,re,r,rp,c)
+    local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+    local sg=g:Select(tp,3,3,nil)
+    Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
+    Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 end
