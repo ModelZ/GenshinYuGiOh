@@ -3,7 +3,12 @@ local s,id=GetID()
 function s.initial_effect(c)
     -- Fusion summon procedure
     c:EnableReviveLimit()
-    Fusion.AddProcMixN(c, true, true, aux.FilterBoolFunction(Card.IsSetCard,0x700), 3)
+    -- Fusion Material: 3 "Genshin" Fusion monsters
+    Fusion.AddProcMixN(c, true, true, 
+        aux.FilterBoolFunction(function(c) 
+            return c:IsSetCard(0x700) and c:IsType(TYPE_FUSION) 
+        end),
+    3)
 
 
     -- Cannot be affected by other cards, summon cannot be negated or tributed
@@ -32,7 +37,7 @@ function s.initial_effect(c)
 
     -- Fusion Summon effect: banish opponent’s Extra Deck and shuffle their GY into deck
     local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
+    e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
     e1:SetCode(EVENT_SPSUMMON_SUCCESS)
     e1:SetCondition(s.fuscon)
     e1:SetOperation(s.fusop)
@@ -117,6 +122,6 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
     if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
         local code=re:GetHandler():GetCode()
         local g=Duel.GetMatchingGroup(Card.IsCode,tp,0,LOCATION_DECK+LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,nil,code)
-        Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
+        Duel.Remove(g,POS_FACEDOWN,REASON_EFFECT)
     end
 end
