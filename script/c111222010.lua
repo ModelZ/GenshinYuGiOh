@@ -3,8 +3,8 @@ local s,id=GetID()
 function s.initial_effect(c)
     -- Fusion summon procedure
     c:EnableReviveLimit()
-    aux.AddFusionProcMix(c,true,true,
-        aux.FilterBoolFunction(Card.IsSetCard,0x700), 3) -- 3 "Genshin" Fusion monsters
+    Fusion.AddProcMixN(c, true, true, aux.FilterBoolFunction(Card.IsSetCard,0x700), 3)
+
 
     -- Cannot be affected by other cards, summon cannot be negated or tributed
     local e0=Effect.CreateEffect(c)
