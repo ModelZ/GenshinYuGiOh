@@ -110,6 +110,13 @@ end
 
 function s.leavecon(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
+    Debug.Message("leavecon triggered")
+    if not re then
+        Debug.Message("leavecon: re is nil")
+    else
+        Debug.Message("leavecon: re = "..re:GetDescription())
+    end
+    Debug.Message("rp="..rp.." tp="..tp.." r="..r)
     return rp~=tp
         and c:IsPreviousLocation(LOCATION_ONFIELD)
         and (re and re:IsActivated())
@@ -117,41 +124,75 @@ function s.leavecon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.leavecost(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsExistingMatchingCard(function(cc)
-        return cc:IsCanRemoveCounter(tp,0,1,1,REASON_COST)
-    end,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
+    Debug.Message("leavecost check")
+    if chk==0 then 
+        local ok=Duel.IsExistingMatchingCard(function(cc)
+            return cc:IsCanRemoveCounter(tp,0,1,1,REASON_COST)
+        end,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
+        Debug.Message("leavecost chk result: "..tostring(ok))
+        return ok
+    end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
     local g=Duel.SelectMatchingCard(tp,function(cc)
         return cc:IsCanRemoveCounter(tp,0,1,1,REASON_COST)
     end,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
     local rc=g:GetFirst()
-    rc:RemoveCounter(tp,0,1,1,REASON_COST)
+    if rc then
+        Debug.Message("leavecost removing counter from "..rc:GetCode())
+        rc:RemoveCounter(tp,0,1,1,REASON_COST)
+    else
+        Debug.Message("leavecost: no card selected")
+    end
 end
 
 function s.leavetg(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
-    local rc=re:GetHandler()
+    local rc=re and re:GetHandler() or nil
+    Debug.Message("leavetg triggered")
     if chk==0 then
-        return rc and rc:IsRelateToEffect(re) and rc:IsDestructable()
+        local ok=rc and rc:IsRelateToEffect(re) and rc:IsDestructable()
             and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
             and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+        Debug.Message("leavetg chk result: "..tostring(ok))
+        return ok
     end
+    if rc then Debug.Message("leavetg targeting card: "..rc:GetCode()) end
     Duel.SetOperationInfo(0, CATEGORY_DESTROY, rc,1,0,0)
-    Duel.SetOperationInfo(0, CATEGORY_SPECIAL_SUMMON, e:GetHandler(),1,0,0)
-    Duel.SetOperationInfo(0, CATEGORY_COUNTER, e:GetHandler(),1,0,0)
+    Duel.SetOperationInfo(0, CATEGORY_SPECIAL_SUMMON, c,1,0,0)
+    Duel.SetOperationInfo(0, CATEGORY_COUNTER, c,1,0,0)
 end
 
 function s.leaveop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    local rc=re:GetHandler()
+    local rc=re and re:GetHandler() or nil
+    Debug.Message("leaveop triggered")
+    if rc then
+        Debug.Message("leaveop: rc="..rc:GetCode())
+    else
+        Debug.Message("leaveop: rc is nil")
+    end
     if rc and rc:IsRelateToEffect(re) then
-        Duel.Destroy(rc, REASON_EFFECT)
-        if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-            Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
-            c:AddCounter(0x303,1)
+        if Duel.Destroy(rc, REASON_EFFECT)>0 then
+            Debug.Message("leaveop: destroyed rc")
+            if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+                if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
+                    Debug.Message("leaveop: special summoned c")
+                    c:AddCounter(0x303,1)
+                    Debug.Message("leaveop: added 1 Lighting Counter")
+                else
+                    Debug.Message("leaveop: failed to special summon c")
+                end
+            else
+                Debug.Message("leaveop: no monster zone available")
+            end
+        else
+            Debug.Message("leaveop: failed to destroy rc")
         end
+    else
+        Debug.Message("leaveop: rc not valid")
     end
 end
+
 
 -- Effect D: negate opponent’s Spell/Trap activation, shuffle to Deck
 

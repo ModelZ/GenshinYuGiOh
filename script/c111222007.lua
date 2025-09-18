@@ -99,6 +99,7 @@ end
 -- target gain indestruction condition
 function s.damcon(e,tp,eg,ep,ev,re,r,rp,chk)
     local tc=Duel.GetAttackTarget()
+    if tc==nil then return false end
     return e:GetHandler():GetCounter(0x301)>0 and
         tc:IsSetCard(0x700) and tc:IsControler(tp)
 end
@@ -128,26 +129,26 @@ end
 
 function s.protcon(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    Debug.Message("protcon called")
+    -- Debug.Message("protcon called")
 
     -- Only opponent's card effect
     if rp==tp or not re:IsActiveType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP) then 
         return false 
     end
-    Debug.Message("protcon: opponent's effect")
+    -- Debug.Message("protcon: opponent's effect")
 
     -- Only effects that have CATEGORY_DESTROY
     if not re:IsHasCategory(CATEGORY_DESTROY) then 
         return false 
     end
-    Debug.Message("protcon: effect has CATEGORY_DESTROY")
+    -- Debug.Message("protcon: effect has CATEGORY_DESTROY")
 
     -- Check that it has at least 1 Akara counter
     if c:GetCounter(0x301)<=0 then
         return false
     end
 
-    Debug.Message("protcon: has at least 1 Akara counter")
+    -- Debug.Message("protcon: has at least 1 Akara counter")
 
     -- Check previous chain link
     local ex,tg,tc=Duel.GetOperationInfo(ev,CATEGORY_DESTROY)
