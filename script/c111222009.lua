@@ -6,7 +6,7 @@ function s.initial_effect(c)
     Fusion.AddProcMix(c,true,true, s.Inazumafilter, s.darkgenshinfilter)
 
     -- Lighting Counter permit
-    c:EnableCounterPermit(0x304)  -- example ID for “Lighting Counter”
+    c:EnableCounterPermit(0x303)  -- example ID for “Lighting Counter”
 
     -- Effect A: If this card is Fusion Summoned → banish all opponent’s cards from GY + place 1 Lighting Counter
     local e1=Effect.CreateEffect(c)
@@ -92,7 +92,7 @@ function s.banishop(e,tp,eg,ep,ev,re,r,rp)
         Duel.Remove(g, POS_FACEUP, REASON_EFFECT)
     end
     -- Regardless, place 1 Lighting Counter on this card
-    c:AddCounter(0x304,1)
+    c:AddCounter(0x303,1)
 end
 
 
@@ -103,7 +103,7 @@ function s.plccon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.plcop(e,tp,eg,ep,ev,re,r,rp)
-    e:GetHandler():AddCounter(0x304,1)
+    e:GetHandler():AddCounter(0x303,1)
 end
 
 -- Effect C: leaves field by opponent effect → remove counter, destroy that card, special summon this, then place 1 Lighting Counter
@@ -148,7 +148,7 @@ function s.leaveop(e,tp,eg,ep,ev,re,r,rp)
         Duel.Destroy(rc, REASON_EFFECT)
         if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
             Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
-            c:AddCounter(0x304,1)
+            c:AddCounter(0x303,1)
         end
     end
 end
@@ -160,8 +160,8 @@ function s.stnegcon(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.stnegcost(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return e:GetHandler():GetCounter(0x304)>0 end
-    e:GetHandler():RemoveCounter(tp,0x304,1,REASON_COST)
+    if chk==0 then return e:GetHandler():GetCounter(0x303)>0 end
+    e:GetHandler():RemoveCounter(tp,0x303,1,REASON_COST)
 end
 
 function s.stnegtg(e,tp,eg,ep,ev,re,r,rp,chk)
