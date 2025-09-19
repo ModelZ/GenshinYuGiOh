@@ -15,11 +15,13 @@ end
 s.listed_series={0x700}
 
 --filter Fusion Monsters
-function s.fusfilter(c,e,tp,mg,chkf)
-	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x700)
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)
-		and c:CheckFusionMaterial(mg,nil,chkf)
+function s.fusfilter(c,e,tp)
+    return c:IsType(TYPE_FUSION)        -- must be a Fusion Monster
+       and c:IsSetCard(0x700)           -- must be a Genshin card
+       and not c:IsHasEffect(EFFECT_CONTACT_FUSION) -- prevent Contact Fusion monsters
+       and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) -- summonable normally
 end
+
 
 function s.fstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
