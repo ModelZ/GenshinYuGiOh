@@ -9,16 +9,37 @@ function s.initial_effect(c)
             return c:IsSetCard(0x700) and c:IsType(TYPE_FUSION) 
         end),
     3)
-    
+    -- Lumine Contact Fusion Procedure
+    -- "3 'Genshin' Fusion Monsters"
+    Fusion.AddContactProc(c,
+        -- Group function: select valid materials
+        function(tp)
+            return Duel.GetMatchingGroup(function(mc)
+                return mc:IsSetCard(0x700) and mc:IsType(TYPE_FUSION)
+                    and (mc:IsLocation(LOCATION_MZONE) or mc:IsLocation(LOCATION_GRAVE))
+                    and mc:IsAbleToDeckAsCost()
+            end, tp, LOCATION_MZONE+LOCATION_GRAVE, 0, nil)
+        end,
+        -- Operation: shuffle selected materials into the Extra Deck
+        function(g,tp)
+            Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_COST+REASON_MATERIAL+REASON_FUSION)
+        end,
+        -- Summon condition: still allow proper Fusion Summon
+        Fusion.ShuffleMaterial,
+        nil, -- no extra condition
+        SUMMON_TYPE_FUSION,
+        nil -- optional description id
+    )
+
     -- Fusion Summon procedure without Fusion Spell
-    local e00=Effect.CreateEffect(c)
-    e00:SetType(EFFECT_TYPE_FIELD)
-    e00:SetCode(EFFECT_SPSUMMON_PROC)
-    e00:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-    e00:SetRange(LOCATION_EXTRA)
-    e00:SetCondition(s.spcon2)
-    e00:SetOperation(s.spop2)
-    c:RegisterEffect(e00)
+    -- local e00=Effect.CreateEffect(c)
+    -- e00:SetType(EFFECT_TYPE_FIELD)
+    -- e00:SetCode(EFFECT_SPSUMMON_PROC)
+    -- e00:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+    -- e00:SetRange(LOCATION_EXTRA)
+    -- e00:SetCondition(s.spcon2)
+    -- e00:SetOperation(s.spop2)
+    -- c:RegisterEffect(e00)
 
     -- Cannot be affected by other cards, summon cannot be negated or tributed
     local e0=Effect.CreateEffect(c)
@@ -144,33 +165,33 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 
--- Check if you can summon Goddess Lumine
-function s.spfilter2(c)
-    return c:IsSetCard(0x700) and c:IsType(TYPE_FUSION) and c:IsAbleToExtra()
-end
+-- -- Check if you can summon Goddess Lumine
+-- function s.spfilter2(c)
+--     return c:IsSetCard(0x700) and c:IsType(TYPE_FUSION) and c:IsAbleToExtra()
+-- end
 
-function s.spcon2(e,c)
-    if c==nil then return true end
-    local tp=c:GetControler()
-    local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
-    return #g>=3 and Duel.GetLocationCountFromEx(tp,tp,g,c)>0
-end
+-- function s.spcon2(e,c)
+--     if c==nil then return true end
+--     local tp=c:GetControler()
+--     local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
+--     return #g>=3 and Duel.GetLocationCountFromEx(tp,tp,g,c)>0
+-- end
 
--- Special Summon operation: shuffle 3 "Genshin" Fusion monsters into Extra Deck
-function s.spop2(e,tp,eg,ep,ev,re,r,rp,c)
-    local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
-    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-    local sg=g:Select(tp,3,3,nil)
+-- -- Special Summon operation: shuffle 3 "Genshin" Fusion monsters into Extra Deck
+-- function s.spop2(e,tp,eg,ep,ev,re,r,rp,c)
+--     local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
+--     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+--     local sg=g:Select(tp,3,3,nil)
     
-    -- Set materials for proper Fusion Summon
-    c:SetMaterial(sg)
+--     -- Set materials for proper Fusion Summon
+--     c:SetMaterial(sg)
     
-    -- Shuffle selected monsters into Extra Deck as fusion materials
-    Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
+--     -- Shuffle selected monsters into Extra Deck as fusion materials
+--     Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
     
-    -- Special Summon the Fusion Monster treated as a Fusion Summon
-    Duel.SpecialSummon(c,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
+--     -- Special Summon the Fusion Monster treated as a Fusion Summon
+--     Duel.SpecialSummon(c,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
     
-    -- Complete procedure so it's treated as Fusion Summoned
-    c:CompleteProcedure()
-end
+--     -- Complete procedure so it's treated as Fusion Summoned
+--     c:CompleteProcedure()
+-- end
