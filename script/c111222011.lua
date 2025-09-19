@@ -15,10 +15,10 @@ end
 s.listed_series={0x700}
 
 --filter Fusion Monsters
-function s.fusfilter(c,e,tp,m,f,chkf)
+function s.fusfilter(c,e,tp,mg,chkf)
 	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x700)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)
-		and c:CheckFusionMaterial(m,nil,chkf)
+		and c:CheckFusionMaterial(mg,nil,chkf)
 end
 
 function s.fstg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -34,16 +34,23 @@ end
 function s.fsop(e,tp,eg,ep,ev,re,r,rp)
 	local chkf=tp
 	local mg=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,LOCATION_DECK,0,nil)
-	local sg=Duel.GetMatchingGroup(s.fusfilter,tp,LOCATION_EXTRA,0,nil,e,tp,mg,nil,chkf)
+	-- wrapper: we must supply the extra args
+	local sg=Duel.GetMatchingGroup(function(c)
+		return s.fusfilter(c,e,tp,mg,chkf)
+	end,tp,LOCATION_EXTRA,0,nil)
 	if #sg==0 then return end
+
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local tc=sg:Select(tp,1,1,nil):GetFirst()
 	if not tc then return end
+
 	local mat=Duel.SelectFusionMaterial(tp,tc,mg,nil,chkf)
 	if not mat or #mat==0 then return end
+
 	tc:SetMaterial(mat)
 	Duel.SendtoGrave(mat,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
 	Duel.BreakEffect()
 	Duel.SpecialSummon(tc,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
 	tc:CompleteProcedure()
 end
+
