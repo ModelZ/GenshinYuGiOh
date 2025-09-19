@@ -16,11 +16,6 @@ s.listed_series={0x700}
 
 --filter Fusion Monsters
 function s.fusfilter(c,e,tp,m,f,chkf)
-	Debug.Message("fusfilter check")
-	Debug.Message("IsSetCard 0x700: "..tostring(c:IsSetCard(0x700)))
-	Debug.Message("IsType TYPE_FUSION: "..tostring(c:IsType(TYPE_FUSION)))
-	Debug.Message("IsCanBeSpecialSummoned: "..tostring(c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)))
-	Debug.Message("CheckFusionMaterial: "..tostring(c:CheckFusionMaterial(m,nil,chkf)))
 	return c:IsType(TYPE_FUSION) and c:IsSetCard(0x700)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false)
 		and c:CheckFusionMaterial(m,nil,chkf)
