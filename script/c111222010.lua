@@ -10,15 +10,15 @@ function s.initial_effect(c)
         end),
     3)
     
-    -- -- Fusion Summon procedure without Fusion Spell
-    -- local e00=Effect.CreateEffect(c)
-    -- e00:SetType(EFFECT_TYPE_FIELD)
-    -- e00:SetCode(EFFECT_SPSUMMON_PROC)
-    -- e00:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-    -- e00:SetRange(LOCATION_EXTRA)
-    -- e00:SetCondition(s.spcon2)
-    -- e00:SetOperation(s.spop2)
-    -- c:RegisterEffect(e00)
+    -- Fusion Summon procedure without Fusion Spell
+    local e00=Effect.CreateEffect(c)
+    e00:SetType(EFFECT_TYPE_FIELD)
+    e00:SetCode(EFFECT_SPSUMMON_PROC)
+    e00:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+    e00:SetRange(LOCATION_EXTRA)
+    e00:SetCondition(s.spcon2)
+    e00:SetOperation(s.spop2)
+    c:RegisterEffect(e00)
 
     -- Cannot be affected by other cards, summon cannot be negated or tributed
     local e0=Effect.CreateEffect(c)
