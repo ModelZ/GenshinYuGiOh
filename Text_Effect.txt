@@ -14,7 +14,7 @@ Goddess Lumine
 3 "Genshin" Fusion monsters
 Must be Special Summoned (from your Extra Deck) by shuffling the above cards from your field, and/or GY into the Extra Deck.
 This card is unaffected by others card's effect and This card's Special Summon cannot be negated and tributed. 
-If this card is Fusion Summoned: You can Banish all opponent's cards in the Extra Deck and shuffle all cards in your opponent's GY into the deck. Once per turn, during the standby phase: You can special summon 1 "Genshin" monster or Fusion monster from Extra Deck, Deck, GY, Banished Zone. When your opponent's card or effect is activated (Quick Effect): Tribute 1 "Genshin" Fusion Monster; negate the activation, then, Banish it face-down with all the cards with its name from Deck, Hand, GY, Banished Zone.
+If this card is Fusion Summoned: You can Banish all opponent's cards in the Extra Deck and shuffle all cards in your opponent's GY into the deck. Once per turn, during the standby phase: You can special summon 1 "Genshin" monster or Fusion monster from Extra Deck, Deck, GY, Banished Zone. When your opponent's card or effect is activated (Quick Effect): Tribute 1 "Genshin" Fusion Monster; negate the activation, then, Banish it face-down with all the cards with its name from Any Locations.
 
 Barbatos
 1 "Mondstadt" monster + 1 "Genshin" WIND monster

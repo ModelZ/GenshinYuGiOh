@@ -57,7 +57,7 @@ function s.initial_effect(c)
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,0))
     e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-    e2:SetCode(EVENT_PHASE+PHASE_STANDBY)
+    e2:SetCode(EVENT_PHASE|PHASE_STANDBY)
     e2:SetRange(LOCATION_MZONE)
     e1:SetCountLimit(1,{id,1})
     e2:SetTarget(s.sptg)
@@ -79,8 +79,8 @@ end
 
 -- Check fusion summon
 function s.fuscon(e,tp,eg,ep,ev,re,r,rp)
-    Debug.Message("fuscon check")
-    Debug.Message("IsSummonType: "..tostring(e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)))
+    -- Debug.Message("fuscon check")
+    -- Debug.Message("IsSummonType: "..tostring(e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)))
     return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
 end
 
@@ -119,11 +119,17 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
         and Duel.IsChainNegatable(ev)
 end
 
+-- Cost: Release 1 "Genshin" Fusion Monster
+function s.cfilter(c)
+    return c:IsSetCard(0x700) and c:IsType(TYPE_FUSION) and c:IsReleasable()
+end
+
 function s.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.CheckReleaseGroup(tp,Card.IsSetCard,1,nil,0x700) end
-    local g=Duel.SelectReleaseGroup(tp,Card.IsSetCard,1,1,nil,0x700)
+    if chk==0 then return Duel.CheckReleaseGroup(tp,s.cfilter,1,nil) end
+    local g=Duel.SelectReleaseGroup(tp,s.cfilter,1,1,nil)
     Duel.Release(g,REASON_COST)
 end
+
 
 function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end
@@ -133,7 +139,7 @@ end
 function s.negop(e,tp,eg,ep,ev,re,r,rp)
     if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
         local code=re:GetHandler():GetCode()
-        local g=Duel.GetMatchingGroup(Card.IsCode,tp,0,LOCATION_DECK+LOCATION_HAND+LOCATION_GRAVE+LOCATION_REMOVED,nil,code)
+        local g=Duel.GetMatchingGroup(Card.IsCode,tp,0,LOCATION_ALL,nil,code)
         Duel.Remove(g,POS_FACEDOWN,REASON_EFFECT)
     end
 end
