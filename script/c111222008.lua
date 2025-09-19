@@ -50,9 +50,17 @@ function s.initial_effect(c)
     c:RegisterEffect(e4)
 end
 
+function s.IsExactSet(c,setcode)
+    local codes={c:GetSetCard()}
+    for _,v in ipairs(codes) do
+        if v==setcode then return true end
+    end
+    return false
+end
+
 -- Filters for fusion materials
 function s.filLiyue(c,fc,sumtype,tp)
-    return c:IsSetCard(0x2700) and c:IsType(TYPE_MONSTER)  -- replace 0xXXXX with your Liyue setcode
+    return s.IsExactSet(c,0x2700) and c:IsType(TYPE_MONSTER)  -- replace 0xXXXX with your Liyue setcode
 end
 function s.filRockGenshin(c,fc,sumtype,tp)
     return c:IsSetCard(0x700) and c:IsAttribute(ATTRIBUTE_EARTH) -- Genshin ROCK monster

@@ -64,9 +64,16 @@ function s.initial_effect(c)
 end
 
 -- Filters
+function s.IsExactSet(c,setcode)
+    local codes={c:GetSetCard()}
+    for _,v in ipairs(codes) do
+        if v==setcode then return true end
+    end
+    return false
+end
 
 function s.Inazumafilter(c,fc,sumtype,tp)
-    return c:IsSetCard(0x3700) and c:IsType(TYPE_MONSTER)
+    return s.IsExactSet(c,0x3700) and c:IsType(TYPE_MONSTER)
 end
 
 function s.darkgenshinfilter(c,fc,sumtype,tp)
