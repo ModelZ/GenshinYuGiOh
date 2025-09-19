@@ -138,33 +138,33 @@ function s.negop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 
--- -- Check if you can summon Goddess Lumine
--- function s.spfilter2(c)
---     return c:IsSetCard(0x700) and c:IsType(TYPE_FUSION) and c:IsAbleToExtra()
--- end
+-- Check if you can summon Goddess Lumine
+function s.spfilter2(c)
+    return c:IsSetCard(0x700) and c:IsType(TYPE_FUSION) and c:IsAbleToExtra()
+end
 
--- function s.spcon2(e,c)
---     if c==nil then return true end
---     local tp=c:GetControler()
---     local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
---     return #g>=3 and Duel.GetLocationCountFromEx(tp,tp,g,c)>0
--- end
+function s.spcon2(e,c)
+    if c==nil then return true end
+    local tp=c:GetControler()
+    local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
+    return #g>=3 and Duel.GetLocationCountFromEx(tp,tp,g,c)>0
+end
 
--- -- Special Summon operation: shuffle 3 "Genshin" Fusion monsters into Extra Deck
--- function s.spop2(e,tp,eg,ep,ev,re,r,rp,c)
---     local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
---     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
---     local sg=g:Select(tp,3,3,nil)
+-- Special Summon operation: shuffle 3 "Genshin" Fusion monsters into Extra Deck
+function s.spop2(e,tp,eg,ep,ev,re,r,rp,c)
+    local g=Duel.GetMatchingGroup(s.spfilter2,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+    local sg=g:Select(tp,3,3,nil)
     
---     -- Set materials for proper Fusion Summon
---     c:SetMaterial(sg)
+    -- Set materials for proper Fusion Summon
+    c:SetMaterial(sg)
     
---     -- Shuffle selected monsters into Extra Deck as fusion materials
---     Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
+    -- Shuffle selected monsters into Extra Deck as fusion materials
+    Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
     
---     -- Special Summon the Fusion Monster
---     Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
+    -- Special Summon the Fusion Monster treated as a Fusion Summon
+    Duel.SpecialSummon(c,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
     
---     -- Complete procedure so it's treated as Fusion Summoned
---     c:CompleteProcedure()
--- end
+    -- Complete procedure so it's treated as Fusion Summoned
+    c:CompleteProcedure()
+end
